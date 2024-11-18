@@ -10,7 +10,7 @@ Code UE: `MU4MEN01` (Sorbonne Université, campus scientifique)
 
 - `Scrap.xoj`: Brouillon du repository, accessible via l'application *Xournal*.
 
-- `Sujet.pdf`: Sujet du projet d'optimisation
+- `Sujet.pdf`: Sujet du projet d'optimisation.
 
 - `Var.m`: Fichier contenant toutes les variables utiles au bon déroulement du projet. Accessible notamment via *Octave*.
 
