@@ -43,16 +43,11 @@ x = marche[:, 1] # Distance parcourue par le train.
 """
 
 # Vitesse v.
-v = np.zeros(len(x))
-for k in range(len(x)-1):
-    v[k] = x[k+1]-x[k]
-v[-1] = v[-2]
+v = np.gradient(x, t[1]-t[0])
+
 
 # Accélération a.
-a = np.zeros(len(v))
-for k in range(len(v)-1):
-    a[k] = v[k+1]-v[k]
-a[-1] = a[-2]
+a = np.gradient(v, t[1]-t[0])
 
 # F_resistive.
 F_resistive = (A_0+A_1*M)+(B_0+B_1*M)*v+(C_0+C_1*M)*v**2
