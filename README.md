@@ -6,7 +6,7 @@ Code UE: `MU4MEN01` (Sorbonne Université, campus scientifique)
 
 - `marche.txt`: Fichier texte contenant deux colonnes: la première pour le temps, en seconde, la deuxième pour la position, en mètre.
 
-- `Projet.xlsx`: Il s'agit du système, avec toutes les variables et les graphes.
+- `Projet.py`: Il s'agit du projet, contenant toutes les variables, les codes, etc...
 
 - `Scrap.pdf`: Version PDF du brouillon du repository (voir ci-dessous).
 
