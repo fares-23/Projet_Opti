@@ -124,13 +124,14 @@ for k in range(len(P_train)):
 # plt.grid()
 # plt.show()
 
+
 plt.figure()
 plt.plot(t, (V_SST**2-4*R_eq*P_LAC), "-b", label="Truc")
 plt.legend()
 plt.xlabel("Temps [s]")
 plt.ylabel("SI")
 plt.grid()
-plt.show()
+
 
 # plt.figure()
 # plt.plot(t, V_train, "-b", label="Tensions aux bornes de la locomotive")

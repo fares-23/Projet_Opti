@@ -1,126 +1,151 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Lire les données depuis le fichier marche.txt
-data = np.loadtxt("marche.txt")
-temps = data[:, 0]  # Première colonne : temps
-position = data[:, 1]  # Deuxième colonne : position
+
+# IMPORTANT: Les unités sont toutes en SI.
 
 
-# Calculer la vitesse en utilisant la différence finie
-vitesse = np.gradient(position, temps[1]-temps[0])
+"""
+    VARIABLES
+    =========
+"""
 
-# Calculer l'accélération en utilisant la différence finie
-acceleration = np.gradient(vitesse, temps[1]-temps[0])
+M = 70000000 # Masse du train.
+A_0 = 780
+A_1 = 6.4*10**(-6)
+B_0 = 0
+B_1 = 0.14*3600*10**(-9)
+C_0 = 0.3634*3600**2*10**(-6)
+C_1 = 0
+alpha = 0 # Pente que le train doit gravir (compté positivement).
+g = 9.81 # Accélération de la pesanteur.
+V_SST = 790 # Tension délivrée par la sous-station.
+R_SST = 33*10**(-3) # Résistance interne de la sous-station.
+rho_LAC = 131*10**(-6) # Résistance linéique de la LAC.
+rho_rail = 18*10**(-6) # Résistance linéique des rails.
+x_Tot = 5000 # Distance totale que le train doit parcourir durant son trajet.
+SysBor = 35000 # Consommation du système de bord.
+rend = 0.8 # Rendement du moteur+convertisseurs.
 
-#Valeurs fixes données dans l'énoncé
-Vsst=790
-Rsst=33e-3
-rho_lac=131e-6
-rho_rail=18e-6
-M=70000
-A0=780
-A1=6.4*10**(-3)
-B0=0
-B1=0.14*10**(-3)/3.6
-C0=0.3634/(3.6**2)
-C1=0
-g=9.81
-rendement=0.8
-conso=35000
 
-#Valeurs variables
-#----------------Partie Mécanique----------------
-R_lac1=rho_lac*position
-R_rail1=rho_rail*position
-R_lac2=rho_lac*(position[-1]-position)
-R_rail2=rho_rail*(position[-1]-position)
+"""
+    GRANDEURS CONNUES
+    =================
+"""
 
-F_resistive=(A0+A1*M)+(B0+B1*M)*vitesse+(C0/(10**3)+C1*M)*(vitesse**2)
-F_motrice=(M*acceleration)+F_resistive
-P_meca=F_motrice*vitesse
+marche = np.loadtxt("marche.txt")
+t = marche[:, 0] # Temps.
+x = marche[:, 1] # Distance parcourue par le train.
 
-#----------------Partie Electrique----------------
-Req1=(Rsst+R_lac1+R_rail1)
-Req2=(Rsst+R_lac2+R_rail2)
 
-Req=(Req1*Req2)/(Req1+Req2)
+"""
+    GRANDEURS CALCULÉES
+    ===================
+"""
 
-I1=Vsst/Req1
-I2=Vsst/Req2 
+# Vitesse v.
+v = np.gradient(x, t[1]-t[0])
 
-P_train=np.zeros(len(P_meca))
 
-for i in range(len(P_meca)):
-    if P_meca[i]>0:
-        P_train[i]=(P_meca[i]/rendement) + conso
+# Accélération a.
+a = np.gradient(v, t[1]-t[0])
+
+# F_resistive.
+F_resistive = (A_0+A_1*M)+(B_0+B_1*M)*v+(C_0+C_1*M)*v**2
+
+# F_motrice.
+F_motrice = M*a+M*g*np.sin(alpha)+F_resistive
+
+# P_mecanique.
+P_mecanique = F_motrice*v
+
+# Puissance totale consommée par le train: P_train.
+P_train = np.zeros(len(P_mecanique))
+for k in range(len(P_mecanique)):
+    if P_mecanique[k] > 0:
+        P_train[k] = P_mecanique[k]/rend+SysBor # On consomme l'énergie.
     else:
-        P_train[i]=(P_meca[i]*rendement) + conso
-        
+        P_train[k] = P_mecanique[k]*rend+SysBor # On produit l'énergie.
 
-#On condidère delta > 0
-V_train=0.5*(Vsst+np.sqrt(Vsst**2-4*P_train*Req))
-I_train=(Vsst-V_train)/Req
+# Résistances du circtui.
+R_LAC1 = rho_LAC*x
+R_LAC2 = (x_Tot-x)*rho_LAC
+R_rail1 = x*rho_rail
+R_rail2 = (x_Tot-x)*rho_rail
+R_eq = ((R_SST+R_LAC1+R_rail1)*(R_SST+R_LAC2+R_rail2))/(2*R_SST+R_LAC1+R_LAC2+R_rail1+R_rail2)
+
+P_LAC = np.zeros(len(P_train))
+for k in range(len(P_train)):
+    if P_train[k] > (V_SST**2)/(4*R_eq[k]):
+        P_LAC[k] = (V_SST**2)/(4*R_eq[k])
+    else:
+        P_LAC[k] = P_train[k]
+
+# Tensions aux bornes du train.
+# V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 
 
-# Afficher les résultats
-plt.figure(figsize=(12, 8))
+"""
+    AFFICHAGE
+    =========
+"""
 
-# Graphique de la position
-plt.subplot(3, 1, 1)
-plt.plot(temps, position, label='Position (x)')
-plt.xlabel('Temps (s)')
-plt.ylabel('Position (m)')
-plt.title('Position en fonction du temps')
-plt.legend()
-plt.grid()
+# plt.figure()
+# plt.subplot(4, 1, 1)
+# plt.plot(t, x/1000, "-k", label="Position du train")
+# plt.title("Position du train en fonction du temps")
+# plt.xlabel("Temps [s]")
+# plt.ylabel("Longueur [km]")
+# plt.grid()
+# plt.legend()
+#
+# plt.subplot(4, 1, 2)
+# plt.plot(t, v/1000, "-k", label="Vitesse du train")
+# plt.title("Vutesse du train en fonction du temps")
+# plt.xlabel("Temps [s]")
+# plt.ylabel("Vitesse [km/s]")
+# plt.grid()
+# plt.legend()
+#
+# plt.subplot(4, 1, 3)
+# plt.plot(t, a/g, "-k", label="Accélération du train")
+# plt.title("Accélération du train en fonction du temps")
+# plt.xlabel("Temps [s]")
+# plt.ylabel("Accélération [g]")
+# plt.grid()
+# plt.legend()
+#
+# plt.subplot(4, 1, 4)
+# plt.plot(t, P_train/1000000, "-b", label="Puissance consommée")
+# plt.legend()
+# plt.xlabel("Temps [s]")
+# plt.ylabel("Puissance [MW]")
+# plt.title("Puissance consommée par le train en fonction du temps")
+# plt.grid()
+# plt.show()
 
-# Graphique de la vitesse
-plt.subplot(3, 1, 2)
-plt.plot(temps, vitesse, label='Vitesse (v)', color='orange')
-plt.xlabel('Temps (s)')
-plt.ylabel('Vitesse (m/s)')
-plt.title('Vitesse en fonction du temps')
-plt.legend()
-plt.grid()
 
-# Graphique de l'accélération
-plt.subplot(3, 1, 3)
-plt.plot(temps, acceleration, label='Accélération (a)', color='green')
-plt.xlabel('Temps (s)')
-plt.ylabel('Accélération (m/s²)')
-plt.title('Accélération en fonction du temps')
-plt.legend()
-plt.grid()
-
-#Graphique de la puissance
 plt.figure()
-plt.plot(temps, P_train, label='Puissance (p)', color='blue')
-# plt.plot(temps, P_meca, label='Puissance (p)', color='red')
-plt.xlabel('Temps (s)')
-plt.ylabel('Puissance (W)')
-plt.title('Puissance du train en fonction du temps')
+plt.plot(t, (V_SST**2-4*R_eq*P_LAC), "-b", label="Truc")
 plt.legend()
+plt.xlabel("Temps [s]")
+plt.ylabel("SI")
 plt.grid()
 
-# Tension du train au cours du temps
+
+v_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 plt.figure()
-plt.subplot(2,1,1)
-plt.plot(temps, V_train, label='Tension du train')
-plt.xlabel('Temps (s)')
-plt.ylabel('Tension (V)')
-plt.title('Tension du train en fonction du temps')
+plt.plot(t, v_train, "-b", label="Truc")
 plt.legend()
+plt.xlabel("Temps [s]")
+plt.ylabel("SI")
 plt.grid()
-
-# Courant du train au cours du temps
-plt.subplot(2,1,2)
-plt.plot(temps, I_train, label='Courant du train')
-plt.xlabel('Temps (s)')
-plt.ylabel('Courant (A)')
-plt.title('Courant du train en fonction du temps')
-plt.legend()
-plt.grid()
-
-plt.tight_layout()
 plt.show()
+
+# plt.figure()
+# plt.plot(t, V_train, "-b", label="Tensions aux bornes de la locomotive")
+# plt.legend()
+# plt.xlabel("Temps [s]")
+# plt.ylabel("Tension [V]")
+# plt.grid()
+# plt.show()
