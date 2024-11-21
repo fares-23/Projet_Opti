@@ -71,16 +71,20 @@ for k in range(len(P_mecanique)):
 R_LAC1 = rho_LAC*x
 R_LAC2 = (x_Tot-x)*rho_LAC
 R_rail1 = x*rho_rail
-R_rail2 = (x_Tot-x)*rho_rail
-R_eq = ((R_SST+R_LAC1+R_rail1)*(R_SST+R_LAC2+R_rail2))/(2*R_SST+R_LAC1+R_LAC2+R_rail1+R_rail2)
+R_rail2 = rho_LAC*(x_Tot-x)
+Rq1 = R_LAC1+R_rail1 + R_SST
+Rq2 = R_LAC2+R_rail2 + R_SST
+Req = Rq1*Rq2/(Rq1+Rq2)
 
 P_LAC = np.zeros(len(P_train))
+
 for k in range(len(P_train)):
-    if P_train[k] > (V_SST**2)/(4*R_eq[k]):
-        P_LAC[k] = (V_SST**2)/(4*R_eq[k])
+    if P_train[k] > (V_SST**2)/(4*Req[k]):
+        P_LAC[k] = (V_SST**2)/(4*Req[k])
+        print(k)
     else:
         P_LAC[k] = P_train[k]
-
+print(k)
 # Tensions aux bornes du train.
 # V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 
@@ -126,14 +130,14 @@ for k in range(len(P_train)):
 
 
 plt.figure()
-plt.plot(t, (V_SST**2-4*R_eq*P_LAC), "-b", label="Truc")
+plt.plot(t, (V_SST**2-4*Req*P_LAC), "-b", label="Truc")
 plt.legend()
 plt.xlabel("Temps [s]")
 plt.ylabel("SI")
 plt.grid()
 
 
-v_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
+v_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*Req*P_LAC))
 plt.figure()
 plt.plot(t, v_train, "-b", label="Truc")
 plt.legend()
