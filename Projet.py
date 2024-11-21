@@ -22,7 +22,7 @@ g = 9.81 # Accélération de la pesanteur.
 V_SST = 790 # Tension délivrée par la sous-station.
 R_SST = 33*10**(-3) # Résistance interne de la sous-station.
 rho_LAC = 131*10**(-6) # Résistance linéique de la LAC.
-rho_rail = 19*10**(-6) # Résistance linéique des rails.
+rho_rail = 18*10**(-6) # Résistance linéique des rails.
 x_Tot = 5000 # Distance totale que le train doit parcourir durant son trajet.
 SysBor = 35000 # Consommation du système de bord.
 
