@@ -67,81 +67,84 @@ for k in range(len(P_mecanique)):
     else:
         P_train[k] = P_mecanique[k]*rend+SysBor # On produit l'énergie.
 
-# Résistances du circtui.
+# Résistances du circuit.
 R_LAC1 = rho_LAC*x
 R_LAC2 = (x_Tot-x)*rho_LAC
 R_rail1 = x*rho_rail
-R_rail2 = rho_LAC*(x_Tot-x)
-Rq1 = R_LAC1+R_rail1 + R_SST
-Rq2 = R_LAC2+R_rail2 + R_SST
-Req = Rq1*Rq2/(Rq1+Rq2)
+R_rail2 = (x_Tot-x)*rho_rail
+R_eq = ((R_SST+R_LAC1+R_rail1)*(R_SST+R_LAC2+R_rail2))/(2*R_SST+R_LAC1+R_LAC2+R_rail1+R_rail2)
 
 P_LAC = np.zeros(len(P_train))
-
 for k in range(len(P_train)):
-    if P_train[k] > (V_SST**2)/(4*Req[k]):
-        P_LAC[k] = (V_SST**2)/(4*Req[k])
-        print(k)
+    if P_train[k] > (V_SST**2)/(4*R_eq[k]):
+        P_LAC[k] = (V_SST**2)/(4*R_eq[k])-SysBor
     else:
         P_LAC[k] = P_train[k]
-print(k)
+
 # Tensions aux bornes du train.
-# V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
+V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
+
+# Courant tranversant le train.
+I_train = P_train/V_train
 
 
 """
     AFFICHAGE
     =========
 """
-
-# plt.figure()
-# plt.subplot(4, 1, 1)
-# plt.plot(t, x/1000, "-k", label="Position du train")
-# plt.title("Position du train en fonction du temps")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Longueur [km]")
-# plt.grid()
-# plt.legend()
-#
-# plt.subplot(4, 1, 2)
-# plt.plot(t, v/1000, "-k", label="Vitesse du train")
-# plt.title("Vutesse du train en fonction du temps")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Vitesse [km/s]")
-# plt.grid()
-# plt.legend()
-#
-# plt.subplot(4, 1, 3)
-# plt.plot(t, a/g, "-k", label="Accélération du train")
-# plt.title("Accélération du train en fonction du temps")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Accélération [g]")
-# plt.grid()
-# plt.legend()
-#
-# plt.subplot(4, 1, 4)
-# plt.plot(t, P_train/1000000, "-b", label="Puissance consommée")
-# plt.legend()
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Puissance [MW]")
-# plt.title("Puissance consommée par le train en fonction du temps")
-# plt.grid()
-# plt.show()
-
-
-v_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*Req*P_LAC))
+#Affichage position :
 plt.figure()
-plt.plot(t, v_train, "-b", label="Truc")
+plt.subplot(3, 1, 1)
+plt.plot(t, x/1000, "-k", label="Position du train") #position normalisé en km
+plt.title("Position, vitesse, accélération du train en fonction du temps")
+plt.xlabel("Temps [s]")
+plt.ylabel("Longueur [km]")
+plt.grid()
+plt.legend()
+
+#Affichage vitesse :
+plt.subplot(3, 1, 2)
+plt.plot(t, v/1000, "-k", label="Vitesse du train") #vitesse normalisé en km/s
+plt.xlabel("Temps [s]")
+plt.ylabel("Vitesse [km/s]")
+plt.grid()
+plt.legend()
+#Affichage accélération :
+plt.subplot(3, 1, 3)
+plt.plot(t, a/g, "-k", label="Accélération du train") #accélération normalisé en g
+plt.xlabel("Temps [s]")
+plt.ylabel("Accélération [g]")
+plt.grid()
+plt.legend()
+
+#Affichage de la puissance :
+plt.figure()
+plt.subplot(3, 1, 1)
+plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") #P_train normalisé en MW
+plt.title("Puissance, tension et courant dans le train")
+plt.xlabel("Temps [s]")
+plt.ylabel("Puissance [MW]")
+plt.legend()
+plt.grid()
+
+#Affichage de la tension :
+plt.subplot(3, 1, 2)
+plt.plot(t, V_train, "-b", label="Tensions aux bornes de la locomotive")
 plt.legend()
 plt.xlabel("Temps [s]")
-plt.ylabel("SI")
+plt.ylabel("Tension [V]")
+plt.grid()
+
+#Affichage du courant :
+plt.subplot(3, 1, 3)
+plt.plot(t, I_train, "-g", label="Courant traversant le train")
+plt.xlabel("Temps [s]")
+plt.ylabel("Courant [A]")
+plt.legend()
 plt.grid()
 plt.show()
 
-# plt.figure()
-# plt.plot(t, V_train, "-b", label="Tensions aux bornes de la locomotive")
-# plt.legend()
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Tension [V]")
-# plt.grid()
-# plt.show()
+
+#Dimensionnement du système de stockage
+
+
