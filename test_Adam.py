@@ -116,23 +116,23 @@ Train_Seuil = 250000 # Seuil de puissance (négatif) auquel le train demande de 
 Rheo_P = np.zeros(len(P_train)) # Puissance dissipée par le rhéostat.
 Rheo_P[0] = 0 # Le rhéostat ne dissipe rien au départ.
 
-for i in range(1, len(P_train)):
-    if P_train[i] < 0 and Bat_Charge[i-1] < Bat_cap:  # Si le train freine et que la batterie n'est pas pleine
-        Bat_Charge[i] = Bat_Charge[i-1] + abs(P_train[i]) * 3600 #charger batterie en fonction de la puissance récupérée
-
-        if Bat_Charge [i] > Bat_cap:
-            Bat_Charge[i] = Bat_cap
-            Rheo_P[i] = Rheo_P[i-1]+P_train[i] + (Bat_Charge[i] - Bat_cap) * 3600
-    elif P_train[i] > Train_Seuil and Bat_Charge[i-1] > 0:  # Si le train demande de l'énergie et que la batterie n'est pas vide
-        energie_disponible = Bat_Charge[i-1] * 3600 # Énergie disponible dans la batterie
-        if P_train[i] > energie_disponible: # Si la batterie ne peut pas fournir toute l'énergie demandée
-            P_train[i] -= energie_disponible # Réduire la puissance demandée
-            Bat_Charge[i] = 0
-        else:
-            Bat_Charge[i] = Bat_Charge[i-1] - P_train[i] / 3600
-            P_train[i] = 0
-    else:  # Si rien ne se passe (train à l'arrêt ou batterie pleine)
-        Bat_Charge[i] = Bat_Charge[i-1]
+for k in range(1, len(t)):
+    if P_train[k] < 0: # Le train freine et la batterie n'est pas pleine.
+        Bat_E[k] = Bat_E[k-1]-P_train[k]
+        P_train[k] = 0
+        if Bat_E[k] > 3600*Bat_cap: # On dépasse la capacité de la batterie?
+            Diff = Bat_E[k] - Bat_cap*3600
+            Bat_E[k] = Bat_cap*3600
+            Rheo_P[k] = Diff # On dissipe dans le rhéostat.
+    elif P_train[k] >= Train_Seuil and Bat_E[k-1] > 0: # Si le train demande de l'énergie et que la batterie n'est pas vide.
+        Bat_E[k] = Bat_E[k-1] - (P_train[k]-Train_Seuil)
+        P_train[k] = Train_Seuil
+        if Bat_E[k] < 0: # Dépasse-t-on les limites de la batterie?
+            Diff = -Bat_E[k]
+            Bat_E[k] = 0
+            P_train[k] += Diff
+    else:
+        Bat_E[k] = Bat_E[k-1]
             
 
 
