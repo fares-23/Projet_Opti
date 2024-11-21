@@ -106,7 +106,7 @@ P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
 """
 
 
-Bat_cap = 500 # Capacité de la batterie (Wh).
+Bat_cap = 10000 # Capacité de la batterie (Wh).
 Bat_E = np.zeros(len(P_train)) # Énergie contenue dans la batterie.
 Bat_Charge = np.zeros(len(P_train)) # Charge de la batterie, au cours du temps.
 Bat_Charge[0] = 0 # Charge de départ de la batterie.
@@ -117,14 +117,14 @@ Rheo_P = np.zeros(len(P_train)) # Puissance dissipée par le rhéostat.
 Rheo_P[0] = 0 # Le rhéostat ne dissipe rien au départ.
 
 for k in range(1, len(t)):
-    if P_train[k] < 0: # Le train freine et la batterie n'est pas pleine.
+    if P_train[k] < 0: # Le train freine.
         Bat_E[k] = Bat_E[k-1]-P_train[k]
         P_train[k] = 0
         if Bat_E[k] > 3600*Bat_cap: # On dépasse la capacité de la batterie?
             Diff = Bat_E[k] - Bat_cap*3600
             Bat_E[k] = Bat_cap*3600
             Rheo_P[k] = Diff # On dissipe dans le rhéostat.
-    elif P_train[k] >= Train_Seuil and Bat_E[k-1] > 0: # Si le train demande de l'énergie et que la batterie n'est pas vide.
+    elif P_train[k] >= Train_Seuil: # Si le train demande de l'énergie et que la batterie n'est pas vide.
         Bat_E[k] = Bat_E[k-1] - (P_train[k]-Train_Seuil)
         P_train[k] = Train_Seuil
         if Bat_E[k] < 0: # Dépasse-t-on les limites de la batterie?
@@ -150,99 +150,99 @@ V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 """
 
 
-# plt.figure("X,V,T du train")
-# # Affichage position :
-# plt.subplot(3, 1, 1)
-# plt.plot(t, x/1000, "-k", label="Position du train") # position normalisé en km
-# plt.title("Position, vitesse, accélération du train en fonction du temps")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Longueur [km]")
-# plt.grid()
-# plt.legend()
-#
-# # Affichage vitesse :
-# plt.subplot(3, 1, 2)
-# plt.plot(t, v/1000, "-k", label="Vitesse du train") # vitesse normalisé en km/s
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Vitesse [km/s]")
-# plt.grid()
-# plt.legend()
-# # Affichage accélération :
-# plt.subplot(3, 1, 3)
-# plt.plot(t, a/g, "-k", label="Accélération du train") # accélération normalisé en g
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Accélération [g]")
-# plt.grid()
-# plt.legend()
-#
-#
-# plt.figure("P,V,I du train")
-# # Affichage de la puissance :
-# plt.subplot(3, 1, 1)
-# plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") # P_train normalisé en MW
-# plt.title("Puissance, tension et courant dans le train")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Puissance [MW]")
-# plt.legend()
-# plt.grid()
-#
-# # Affichage de la tension :
-# plt.subplot(3, 1, 2)
-# plt.plot(t, V_train, "-k", label="Tensions aux bornes de la locomotive")
-# plt.legend()
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Tension [V]")
-# plt.grid()
-#
-# # Affichage du courant :
-# plt.subplot(3, 1, 3)
-# plt.plot(t, I_train, "-k", label="Courant traversant le train")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Courant [A]")
-# plt.legend()
-# plt.grid()
-#
-#
-# plt.figure("I_1, I_2, I_train")
-# # Affichage de I_1, I_2 et I_train:
-# plt.plot(t, I_1, "-b", label="I_1")
-# plt.plot(t, I_2, "-g", label="I_2")
-# plt.plot(t, I_train, "-k", label="I_train")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Courant [A]")
-# plt.title("Courants dans les branches du circuit")
-# plt.grid()
-# plt.legend()
-#
-#
-# plt.figure("P_SS1, P_SS2, P_train")
-# # Affichage Puissance des stations et du train
-# plt.subplot(3, 1, 1)
-# plt.plot(t, P_SST1/1000000, "-b", label="Sous-station 1") # normalisé en MW
-# plt.plot(t, P_SST2/1000000, "-g", label="Sous-station 2") # normalisé en MW
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Puissance [MW]")
-# plt.title("Puissances mises en jeu")
-# plt.legend()
-# plt.grid()
-#
-# # Affichage de la puissance des stations avec pertes
-# plt.subplot(3, 1, 2)
-# plt.plot(t, P_SST1_loss/1000000, "-m", label="Perte 1") # normalisé en MW
-# plt.plot(t, P_SST2_loss/1000000, "-c", label="Perte 2") # normalisé en MW
-# plt.grid()
-# plt.legend()
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Puissance [MW]")
-#
-# # Affichage de la puissance des stations avec pertes
-# plt.subplot(3, 1, 3)
-# plt.plot(t, (P_SST1+P_SST2-P_SST1_loss-P_SST2_loss)/1000000, "-r", label="Puissance des stations, avec pertes") # normalisé en MW
-# plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") # P_train normalisé en MW
-# plt.grid()
-# plt.legend()
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Puissance [MW]")
+plt.figure("X,V,T du train")
+# Affichage position :
+plt.subplot(3, 1, 1)
+plt.plot(t, x/1000, "-k", label="Position du train") # position normalisé en km
+plt.title("Position, vitesse, accélération du train en fonction du temps")
+plt.xlabel("Temps [s]")
+plt.ylabel("Longueur [km]")
+plt.grid()
+plt.legend()
+
+# Affichage vitesse :
+plt.subplot(3, 1, 2)
+plt.plot(t, v/1000, "-k", label="Vitesse du train") # vitesse normalisé en km/s
+plt.xlabel("Temps [s]")
+plt.ylabel("Vitesse [km/s]")
+plt.grid()
+plt.legend()
+# Affichage accélération :
+plt.subplot(3, 1, 3)
+plt.plot(t, a/g, "-k", label="Accélération du train") # accélération normalisé en g
+plt.xlabel("Temps [s]")
+plt.ylabel("Accélération [g]")
+plt.grid()
+plt.legend()
+
+
+plt.figure("P,V,I du train")
+# Affichage de la puissance :
+plt.subplot(3, 1, 1)
+plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") # P_train normalisé en MW
+plt.title("Puissance, tension et courant dans le train")
+plt.xlabel("Temps [s]")
+plt.ylabel("Puissance [MW]")
+plt.legend()
+plt.grid()
+
+# Affichage de la tension :
+plt.subplot(3, 1, 2)
+plt.plot(t, V_train, "-k", label="Tensions aux bornes de la locomotive")
+plt.legend()
+plt.xlabel("Temps [s]")
+plt.ylabel("Tension [V]")
+plt.grid()
+
+# Affichage du courant :
+plt.subplot(3, 1, 3)
+plt.plot(t, I_train, "-k", label="Courant traversant le train")
+plt.xlabel("Temps [s]")
+plt.ylabel("Courant [A]")
+plt.legend()
+plt.grid()
+
+
+plt.figure("I_1, I_2, I_train")
+# Affichage de I_1, I_2 et I_train:
+plt.plot(t, I_1, "-b", label="I_1")
+plt.plot(t, I_2, "-g", label="I_2")
+plt.plot(t, I_train, "-k", label="I_train")
+plt.xlabel("Temps [s]")
+plt.ylabel("Courant [A]")
+plt.title("Courants dans les branches du circuit")
+plt.grid()
+plt.legend()
+
+
+plt.figure("P_SS1, P_SS2, P_train")
+# Affichage Puissance des stations et du train
+plt.subplot(3, 1, 1)
+plt.plot(t, P_SST1/1000000, "-b", label="Sous-station 1") # normalisé en MW
+plt.plot(t, P_SST2/1000000, "-g", label="Sous-station 2") # normalisé en MW
+plt.xlabel("Temps [s]")
+plt.ylabel("Puissance [MW]")
+plt.title("Puissances mises en jeu")
+plt.legend()
+plt.grid()
+
+# Affichage de la puissance des stations avec pertes
+plt.subplot(3, 1, 2)
+plt.plot(t, P_SST1_loss/1000000, "-m", label="Perte 1") # normalisé en MW
+plt.plot(t, P_SST2_loss/1000000, "-c", label="Perte 2") # normalisé en MW
+plt.grid()
+plt.legend()
+plt.xlabel("Temps [s]")
+plt.ylabel("Puissance [MW]")
+
+# Affichage de la puissance des stations avec pertes
+plt.subplot(3, 1, 3)
+plt.plot(t, (P_SST1+P_SST2-P_SST1_loss-P_SST2_loss)/1000000, "-r", label="Puissance des stations, avec pertes") # normalisé en MW
+plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") # P_train normalisé en MW
+plt.grid()
+plt.legend()
+plt.xlabel("Temps [s]")
+plt.ylabel("Puissance [MW]")
 
 plt.figure()
 # Affichage de l'énergie de la batterie, de la consommation du rhéostat et de l'énergie du train ainsi que de sa tension.
