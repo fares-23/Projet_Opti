@@ -132,10 +132,6 @@ plt.ylabel("SI")
 plt.grid()
 plt.show()
 
-for k in range(len(P_LAC)):
-    if V_SST**2-4*R_eq[k]*P_LAC[k] < 0:
-        raise ValueError("C'est la grosse merde!")
-
 # plt.figure()
 # plt.plot(t, V_train, "-b", label="Tensions aux bornes de la locomotive")
 # plt.legend()
