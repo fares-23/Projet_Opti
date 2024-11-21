@@ -39,8 +39,8 @@ x = marche[:, 1] # Distance parcourue par le train.
 
 
 """
-    GRANDEURS CALCULÉES
-    ===================
+    GRANDEURS CALCULÉES (TRAIN)
+    ===========================
 """
 
 # Vitesse v.
@@ -98,6 +98,22 @@ P_SST2 = I_2*V_SST
 # Puissance perdue par sous-station.
 P_SST1_loss = (R_SST+R_LAC1+R_rail1)*I_1**2
 P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
+
+
+"""
+    BATTERIE
+    ========
+"""
+
+capa_bat = 15000 # Capacité de la batterie (Wh).
+
+# Énergie dans la batterie.
+E_bat = np.zeros(len(t))
+for k in range(1, len(t)):
+    if v[k] < 0:
+        E_bat[k] += -P_train[k]
+    else:
+        E_bat[k] = E_bat[k-1]
 
 
 """
