@@ -101,10 +101,10 @@ seuil = 0.85 * np.max(P_train)  # Seuil de puissance pour décharger la batterie
 for i in range(1,len(t)):
     if P_train[i] < 0:  # Train en freinage
         if E_batterie[i - 1] < E_batterie_max: #Energie batterie inférieur à la capacité max
-            P_batterie[i] = min(-P_train[i],-(E_batterie_max - E_batterie[i - 1])/dt)
+            P_batterie[i] = P_train[i]
         else:
             P_batterie[i] = 0
-        P_rheostat[i] = -P_train[i] - P_batterie[i]
+            P_rheostat[i] = -P_train[i] - P_batterie[i]
     if P_train[i] > 0:  # Train en consommation
         if E_batterie[i - 1] > 0:  # Batterie dispo
             P_batterie[i] = min(P_train[i], E_batterie[i - 1]/dt)
