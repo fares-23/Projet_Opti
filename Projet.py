@@ -39,8 +39,8 @@ x = marche[:, 1] # Distance parcourue par le train.
 
 
 """
-    GRANDEURS CALCULÉES (TRAIN)
-    ===========================
+    GRANDEURS CALCULÉES (TRAIN & RÉSEAU ÉLECTRIQUE)
+    ===============================================
 """
 
 # Vitesse v.
