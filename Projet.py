@@ -74,8 +74,15 @@ R_rail1 = x*rho_rail
 R_rail2 = (x_Tot-x)*rho_rail
 R_eq = ((R_SST+R_LAC1+R_rail1)*(R_SST+R_LAC2+R_rail2))/(2*R_SST+R_LAC1+R_LAC2+R_rail1+R_rail2)
 
+P_LAC = np.zeros(len(P_train))
+for k in range(len(P_train)):
+    if P_train[k] > (V_SST**2)/(4*R_eq[k]):
+        P_LAC[k] = (V_SST**2)/(4*R_eq[k])
+    else:
+        P_LAC[k] = P_train[k]
+
 # Tensions aux bornes du train.
-V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_train))
+# V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 
 
 """
@@ -117,13 +124,17 @@ V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_train))
 # plt.grid()
 # plt.show()
 
-# plt.figure()
-# plt.plot(t, (V_SST**2-4*R_eq*P_train), "-b", label="Truc")
-# plt.legend()
-# plt.xlabel("Temps [s]")
-# plt.ylabel("SI")
-# plt.grid()
-# plt.show()
+plt.figure()
+plt.plot(t, (V_SST**2-4*R_eq*P_LAC), "-b", label="Truc")
+plt.legend()
+plt.xlabel("Temps [s]")
+plt.ylabel("SI")
+plt.grid()
+plt.show()
+
+for k in range(len(P_LAC)):
+    if V_SST**2-4*R_eq[k]*P_LAC[k] < 0:
+        raise ValueError("C'est la grosse merde!")
 
 # plt.figure()
 # plt.plot(t, V_train, "-b", label="Tensions aux bornes de la locomotive")
