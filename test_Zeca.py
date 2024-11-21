@@ -75,14 +75,14 @@ R_rail2 = (x[-1]-x)*rho_rail
 R_eq = ((R_SST+R_LAC1+R_rail1)*(R_SST+R_LAC2+R_rail2))/(2*R_SST+R_LAC1+R_LAC2+R_rail1+R_rail2)
 
 P_LAC = (V_SST**2)/(4*R_eq)
-# for k in range(len(P_train)):
-#    if P_train[k] > (V_SST**2)/(4*R_eq[k]):
-#        P_LAC[k] = (V_SST**2)/(4*R_eq[k])
-#    else:
-#       P_LAC[k] = P_train[k]
+for k in range(len(P_train)):
+   if P_train[k] > (V_SST**2)/(4*R_eq[k]):
+       P_LAC[k] = (V_SST**2)/(4*R_eq[k])
+   else:
+      P_LAC[k] = P_train[k]
 
 # Tensions aux bornes du train.
-V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_train))
+V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 
 
 """
