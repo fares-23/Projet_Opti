@@ -67,7 +67,7 @@ for k in range(len(P_mecanique)):
     else:
         P_train[k] = P_mecanique[k]*rend+SysBor # On produit l'énergie.
 
-# Résistances du circtui.
+# Résistances du circuit.
 R_LAC1 = rho_LAC*x
 R_LAC2 = (x_Tot-x)*rho_LAC
 R_rail1 = x*rho_rail
