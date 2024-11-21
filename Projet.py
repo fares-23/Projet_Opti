@@ -106,23 +106,23 @@ P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
 """
 
 
-Bat_cap = 15000 # Capacité de la batterie (Wh).
+Bat_cap = 500 # Capacité de la batterie (Wh).
 Bat_E = np.zeros(len(P_train)) # Énergie contenue dans la batterie.
 Bat_Charge = np.zeros(len(P_train)) # Charge de la batterie, au cours du temps.
 Bat_Charge[0] = 0 # Charge de départ de la batterie.
-if Bat_Charge[0] > Bat_cap: # On vérifie qu'on ne dépasse pas le capacité de la batterie.
+if Bat_Charge[0] > Bat_cap*3600 and Bat_Charge < 0: # On vérifie qu'on ne dépasse pas le capacité de la batterie.
     raise ValueError("On dépasse les capacités de la batterie!")
 Train_Seuil = 250000 # Seuil de puissance (négatif) auquel le train demande de l'énergie.
 Rheo_P = np.zeros(len(P_train)) # Puissance dissipée par le rhéostat.
 Rheo_P[0] = 0 # Le rhéostat ne dissipe rien au départ.
 
 for k in range(1, len(t)):
-    if P_train[k-1] < 0 and Bat_E[k-1] < 3600*Bat_cap: # Le train freine et la batterie n'est pas pleine.
-        Bat_E[k] = Bat_E[k-1]-P_train[k-1]
+    if P_train[k] < 0: # Le train freine et la batterie n'est pas pleine.
+        Bat_E[k] = Bat_E[k-1]-P_train[k]
         P_train[k] = 0
         if Bat_E[k] > 3600*Bat_cap: # On dépasse la capacité de la batterie?
-            Diff = Bat_E[k] - Bat_cap
-            Bat_E[k] = Bat_cap
+            Diff = Bat_E[k] - Bat_cap*3600
+            Bat_E[k] = Bat_cap*3600
             Rheo_P[k] = Diff # On dissipe dans le rhéostat.
     elif P_train[k] >= Train_Seuil and Bat_E[k-1] > 0: # Si le train demande de l'énergie et que la batterie n'est pas vide.
         Bat_E[k] = Bat_E[k-1] - (P_train[k]-Train_Seuil)
@@ -248,7 +248,7 @@ plt.figure()
 # Affichage de l'énergie de la batterie, de la consommation du rhéostat et de l'énergie du train ainsi que de sa tension.
 plt.subplot(3, 1, 1)
 plt.plot(t, Bat_E/1000000, "-b", label="Énergie dans la batterie")
-plt.plot(t, Rheo_P/1000000, "-g", label="Somme des énergies perdues dans le rhéostat")
+plt.plot(t, Rheo_P/1000000, "-g", label="Énergie perdue dans le rhéostat")
 plt.xlabel("Temps [s]")
 plt.ylabel("Énergie [MJ]")
 plt.grid()
