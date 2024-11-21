@@ -106,7 +106,6 @@ P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
 """
 
 
-# Si appelé, simule le fonctionnement de la batterie.
 Bat_cap = 15000 # Capacité de la batterie (Wh).
 Bat_E = np.zeros(len(P_train)) # Énergie contenue dans la batterie.
 Bat_Charge = np.zeros(len(P_train)) # Charge de la batterie, au cours du temps.
@@ -140,6 +139,7 @@ for k in range(len(P_train)):
         P_LAC[k] = (V_SST**2)/(4*R_eq[k])-SysBor
     else:
         P_LAC[k] = P_train[k]
+V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 
 
 """
