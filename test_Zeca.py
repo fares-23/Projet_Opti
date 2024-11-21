@@ -69,77 +69,61 @@ for k in range(len(P_mecanique)):
 
 # Résistances du circuit.
 R_LAC1 = rho_LAC*x
-R_LAC2 = (x[-1]-x)*rho_LAC
+R_LAC2 = (x_Tot-x)*rho_LAC
 R_rail1 = x*rho_rail
-R_rail2 = (x[-1]-x)*rho_rail
+R_rail2 = (x_Tot-x)*rho_rail
 R_eq = ((R_SST+R_LAC1+R_rail1)*(R_SST+R_LAC2+R_rail2))/(2*R_SST+R_LAC1+R_LAC2+R_rail1+R_rail2)
 
-P_LAC = (V_SST**2)/(4*R_eq)
+P_LAC = np.zeros(len(P_train))
 for k in range(len(P_train)):
-   if P_train[k] > (V_SST**2)/(4*R_eq[k]):
-       P_LAC[k] = (V_SST**2)/(4*R_eq[k])
-   else:
-      P_LAC[k] = P_train[k]
+    if P_train[k] > (V_SST**2)/(4*R_eq[k]):
+        P_LAC[k] = (V_SST**2)/(4*R_eq[k])-SysBor
+    else:
+        P_LAC[k] = P_train[k]
+
+P_LAC_max = (V_SST**2)/(4*min(R_eq))
 
 # Tensions aux bornes du train.
 V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 
+# Courant tranversant le train.
+I_train = P_train/V_train
 
-"""
-    AFFICHAGE
-    =========
-"""
+# Paramètres de la batterie
 
-# plt.figure()
-# plt.subplot(4, 1, 1)
-# plt.plot(t, x/1000, "-k", label="Position du train")
-# plt.title("Position du train en fonction du temps")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Longueur [km]")
-# plt.grid()
-# plt.legend()
-#
-# plt.subplot(4, 1, 2)
-# plt.plot(t, v/1000, "-k", label="Vitesse du train")
-# plt.title("Vutesse du train en fonction du temps")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Vitesse [km/s]")
-# plt.grid()
-# plt.legend()
-#
-# plt.subplot(4, 1, 3)
-# plt.plot(t, a/g, "-k", label="Accélération du train")
-# plt.title("Accélération du train en fonction du temps")
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Accélération [g]")
-# plt.grid()
-# plt.legend()
-#
-# plt.subplot(4, 1, 4)
-# plt.plot(t, P_train/1000000, "-b", label="Puissance consommée")
-# plt.legend()
-# plt.xlabel("Temps [s]")
-# plt.ylabel("Puissance [MW]")
-# plt.title("Puissance consommée par le train en fonction du temps")
-# plt.grid()
-# plt.show()
+E_batterie_max = 10000 # Capacité maximale de la batterie (10 kWh)
+P_batterie = np.zeros_like(t)  # Puissance échangée avec la batterie
+P_rheostat = np.zeros_like(t)  # Puissance dissipée dans le rhéostat
+E_batterie = np.zeros_like(t)  # Énergie stockée dans la batterie
+dt = t[1]-t[0]
+seuil = 0.85 * np.max(P_train)  # Seuil de puissance pour décharger la batterie
+# Gestion de la batterie
+for i in range(1,len(t)):
+    if P_train[i] < 0:  # Train en freinage
+        if E_batterie[i - 1] < E_batterie_max: #Energie batterie inférieur à la capacité max
+            P_batterie[i] = min(-P_train[i],-(E_batterie_max - E_batterie[i - 1])/dt)
+        else:
+            P_batterie[i] = 0
+        P_rheostat[i] = -P_train[i] - P_batterie[i]
+    if P_train[i] > 0:  # Train en consommation
+        if E_batterie[i - 1] > 0:  # Batterie dispo
+            P_batterie[i] = min(P_train[i], E_batterie[i - 1]/dt)
+            if P_train[i] > P_batterie[i]: #Puissance insufisante
+                P_train[i] -= P_batterie[i] #Train prend la puissance dispo
+                E_batterie[i] = 0 #vide la batterie
+            else:
+                P_batterie[i] = P_batterie[i-1] - P_train[i] #On vide la batterie en fonction de la puissance demandée par le train
+        else:
+            P_batterie[i] = 0
+            P_rheostat[i] = 0
+    # Mise à jour de l'énergie de la batterie
+    E_batterie[i] = E_batterie[i - 1] - P_batterie[i]*3600*dt
 
-# plt.figure()
-# plt.plot(t, (V_SST**2-4*R_eq*P_LAC), "-b", label="Truc")
-# plt.legend()
-# plt.xlabel("Temps [s]")
-# plt.ylabel("SI")
-# plt.grid()
-# plt.show()
-
-# for k in range(len(P_LAC)):
-#     if V_SST**2-4*R_eq[k]*P_LAC[k] < 0:
-#         raise ValueError("C'est la grosse merde!")
-
-plt.figure()
-plt.plot(t, V_train, "-b", label="Tensions aux bornes de la locomotive")
+plt.figure(figsize=(12, 6))
+plt.plot(t, E_batterie, label='Charge de la batterie')
+plt.xlabel('Temps (s)')
+plt.ylabel('Charge de la batterie (kWh)')
+plt.title('Évolution de la charge de la batterie en fonction du temps')
 plt.legend()
-plt.xlabel("Temps [s]")
-plt.ylabel("Tension [V]")
 plt.grid()
 plt.show()
