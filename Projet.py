@@ -10,12 +10,12 @@ import matplotlib.pyplot as plt
     =========
 """
 
-M = 70000000 # Masse du train.
+M = 70000 # Masse du train.
 A_0 = 780
-A_1 = 6.4*10**(-6)
+A_1 = 6.4*10**(-3)
 B_0 = 0
-B_1 = 0.14*3600*10**(-9)
-C_0 = 0.3634*3600**2*10**(-6)
+B_1 = 0.14*3.6*10**(-3)
+C_0 = 0.3634*3.6**2
 C_1 = 0
 alpha = 0 # Pente que le train doit gravir (compté positivement).
 g = 9.81 # Accélération de la pesanteur.
@@ -77,12 +77,12 @@ R_eq = ((R_SST+R_LAC1+R_rail1)*(R_SST+R_LAC2+R_rail2))/(2*R_SST+R_LAC1+R_LAC2+R_
 P_LAC = np.zeros(len(P_train))
 for k in range(len(P_train)):
     if P_train[k] > (V_SST**2)/(4*R_eq[k]):
-        P_LAC[k] = (V_SST**2)/(4*R_eq[k])
+        P_LAC[k] = (V_SST**2)/(4*R_eq[k])-SysBor
     else:
         P_LAC[k] = P_train[k]
 
 # Tensions aux bornes du train.
-# V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
+V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 
 
 """
@@ -126,11 +126,12 @@ for k in range(len(P_train)):
 
 
 plt.figure()
-plt.plot(t, (V_SST**2-4*R_eq*P_LAC), "-b", label="Truc")
+plt.plot(t, V_train, "-b", label="Tension aux bornes du train")
 plt.legend()
 plt.xlabel("Temps [s]")
-plt.ylabel("SI")
+plt.ylabel("Tenstion [V]")
 plt.grid()
+plt.show()
 
 
 # plt.figure()
