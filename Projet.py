@@ -95,6 +95,10 @@ I_2 = (V_SST-V_train)/(R_SST+R_LAC2+R_rail2)
 P_SST1 = I_1*V_SST
 P_SST2 = I_2*V_SST
 
+# Puissance perdue par sous-station.
+P_SST1_loss = (R_SST+R_LAC1+R_rail1)*I_1**2
+P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
+
 
 """
     AFFICHAGE
@@ -169,13 +173,28 @@ plt.legend()
 
 plt.figure()
 # Puissance des stations et du train
+plt.subplot(3, 1, 1)
 plt.plot(t, P_SST1/1000000, "-b", label="Sous-station 1") # normalisé en MW
 plt.plot(t, P_SST2/1000000, "-g", label="Sous-station 2") # normalisé en MW
-plt.plot(t, (P_SST1+P_SST2)/1000000, "-r", label="Puissance des stations") # normalisé en MW
-plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") # P_train normalisé en MW
 plt.xlabel("Temps [s]")
 plt.ylabel("Puissance [MW]")
 plt.title("Puissances mises en jeu")
 plt.legend()
 plt.grid()
+
+plt.subplot(3, 1, 2)
+plt.plot(t, P_SST1_loss/1000000, "-m", label="Perte 1") # normalisé en MW
+plt.plot(t, P_SST2_loss/1000000, "-c", label="Perte 2") # normalisé en MW
+plt.grid()
+plt.legend()
+plt.xlabel("Temps [s]")
+plt.ylabel("Puissance [MW]")
+
+plt.subplot(3, 1, 3)
+plt.plot(t, (P_SST1+P_SST2-P_SST1_loss-P_SST2_loss)/1000000, "-r", label="Puissance des stations, avec pertes") # normalisé en MW
+plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") # P_train normalisé en MW
+plt.grid()
+plt.legend()
+plt.xlabel("Temps [s]")
+plt.ylabel("Puissance [MW]")
 plt.show()
