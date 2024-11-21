@@ -106,33 +106,33 @@ P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
 """
 
 
-plt.figure()
-#Affichage position :
-plt.subplot(3, 1, 1)
-plt.plot(t, x/1000, "-k", label="Position du train") #position normalisé en km
-plt.title("Position, vitesse, accélération du train en fonction du temps")
-plt.xlabel("Temps [s]")
-plt.ylabel("Longueur [km]")
-plt.grid()
-plt.legend()
+# plt.figure("X,V,T du train")
+# #Affichage position :
+# plt.subplot(3, 1, 1)
+# plt.plot(t, x/1000, "-k", label="Position du train") #position normalisé en km
+# plt.title("Position, vitesse, accélération du train en fonction du temps")
+# plt.xlabel("Temps [s]")
+# plt.ylabel("Longueur [km]")
+# plt.grid()
+# plt.legend()
 
-#Affichage vitesse :
-plt.subplot(3, 1, 2)
-plt.plot(t, v/1000, "-k", label="Vitesse du train") #vitesse normalisé en km/s
-plt.xlabel("Temps [s]")
-plt.ylabel("Vitesse [km/s]")
-plt.grid()
-plt.legend()
-#Affichage accélération :
-plt.subplot(3, 1, 3)
-plt.plot(t, a/g, "-k", label="Accélération du train") #accélération normalisé en g
-plt.xlabel("Temps [s]")
-plt.ylabel("Accélération [g]")
-plt.grid()
-plt.legend()
+# #Affichage vitesse :
+# plt.subplot(3, 1, 2)
+# plt.plot(t, v/1000, "-k", label="Vitesse du train") #vitesse normalisé en km/s
+# plt.xlabel("Temps [s]")
+# plt.ylabel("Vitesse [km/s]")
+# plt.grid()
+# plt.legend()
+# #Affichage accélération :
+# plt.subplot(3, 1, 3)
+# plt.plot(t, a/g, "-k", label="Accélération du train") #accélération normalisé en g
+# plt.xlabel("Temps [s]")
+# plt.ylabel("Accélération [g]")
+# plt.grid()
+# plt.legend()
 
 
-# plt.figure()
+# plt.figure("P,V,I du train")
 # #Affichage de la puissance :
 # plt.subplot(3, 1, 1)
 # plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") #P_train normalisé en MW
@@ -159,7 +159,7 @@ plt.legend()
 # plt.grid()
 
 
-# plt.figure()
+# plt.figure("I_1, I_2, I_train")
 # # Affichage de I_1, I_2 et I_train:
 # plt.plot(t, I_1, "-b", label="I_1")
 # plt.plot(t, I_2, "-g", label="I_2")
@@ -171,8 +171,8 @@ plt.legend()
 # plt.legend()
 
 
-# plt.figure()
-# # Puissance des stations et du train
+# plt.figure("P_SS1, P_SS2, P_train")
+# # Affichage Puissance des stations et du train
 # plt.subplot(3, 1, 1)
 # plt.plot(t, P_SST1/1000000, "-b", label="Sous-station 1") # normalisé en MW
 # plt.plot(t, P_SST2/1000000, "-g", label="Sous-station 2") # normalisé en MW
@@ -182,6 +182,7 @@ plt.legend()
 # plt.legend()
 # plt.grid()
 
+# # Affichage de la puissance des stations avec pertes
 # plt.subplot(3, 1, 2)
 # plt.plot(t, P_SST1_loss/1000000, "-m", label="Perte 1") # normalisé en MW
 # plt.plot(t, P_SST2_loss/1000000, "-c", label="Perte 2") # normalisé en MW
@@ -190,6 +191,7 @@ plt.legend()
 # plt.xlabel("Temps [s]")
 # plt.ylabel("Puissance [MW]")
 
+# # Affichage de la puissance des stations avec pertes
 # plt.subplot(3, 1, 3)
 # plt.plot(t, (P_SST1+P_SST2-P_SST1_loss-P_SST2_loss)/1000000, "-r", label="Puissance des stations, avec pertes") # normalisé en MW
 # plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") # P_train normalisé en MW
@@ -198,5 +200,38 @@ plt.legend()
 # plt.xlabel("Temps [s]")
 # plt.ylabel("Puissance [MW]")
 # plt.show()
+
+
+
+#----------------------Batterie-----------------------
+
+capacite = 10000  # Capacité maximale de la batterie (10 kWh)
+charge_batterie = np.zeros(len(P_train)) # Charge de la batterie unité 
+seuil = 0.85 * np.max(P_train)  # Seuil de puissance pour décharger la batterie
+P_rheo = np.zeros(len(P_train))  # Puissance dissipée par le rhéostat
+# Boucle pour mettre à jour la charge de la batterie
+for i in range(1, len(P_train)):
+    if P_train[i] < 0 and charge_batterie[i-1] < capacite:  # Si le train freine et que la batterie n'est pas pleine
+        charge_batterie[i] = charge_batterie[i-1] + abs(P_train[i]) * 3600 #charger batterie en fonction de la puissance récupérée
+        
+        if charge_batterie[i] > capacite:  # Assurer que la batterie ne dépasse pas sa capacité maximale
+            charge_batterie[i] = capacite 
+            P_rheo[i] = P_rheo[i-1]+P_train[i] + (charge_batterie[i] - capacite) * 3600 #dissiper l'énergie excédentaire
+        
+    elif P_train[i] > seuil and charge_batterie[i-1] > 0:  # Si le train demande de l'énergie et que la batterie n'est pas vide
+        energie_disponible = charge_batterie[i-1] * 3600 # Énergie disponible dans la batterie
+        if P_train[i] > energie_disponible: # Si la batterie ne peut pas fournir toute l'énergie demandée
+            P_train[i] -= energie_disponible # Réduire la puissance demandée 
+            charge_batterie[i] = 0
+        else:
+            charge_batterie[i] = charge_batterie[i-1] - P_train[i] / 3600 #décharger batterie en fonction de la puissance demandée
+            P_train[i] = 0
+    else:  # Si rien ne se passe (train à l'arrêt ou batterie pleine)
+        charge_batterie[i] = charge_batterie[i-1]
+
+# Calcul de la vitesse du train
+V_train = 0.5 * (V_SST + np.sqrt(V_SST**2 - 4 * P_train * R_eq))
+
+
 
 
