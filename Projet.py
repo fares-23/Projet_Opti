@@ -29,8 +29,8 @@ rend = 0.8 # Rendement du moteur+convertisseurs.
 
 
 """
-    GRANDEURS CONNUES
-    =================
+    GRANDEURS MESURÉES
+    ==================
 """
 
 marche = np.loadtxt("marche.txt")
@@ -39,8 +39,8 @@ x = marche[:, 1] # Distance parcourue par le train.
 
 
 """
-    GRANDEURS CALCULÉES
-    ===================
+    TRAIN & RÉSEAU
+    ==============
 """
 
 # Vitesse v.
@@ -101,31 +101,73 @@ P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
 
 
 """
+    BATTERIE
+    ========
+"""
+
+
+# Si appelé, simule le fonctionnement de la batterie.
+Bat_cap = 15000 # Capacité de la batterie (Wh).
+Bat_E = np.zeros(len(P_train)) # Énergie contenue dans la batterie.
+Bat_Charge = np.zeros(len(P_train)) # Charge de la batterie, au cours du temps.
+Bat_Charge[0] = 0 # Charge de départ de la batterie.
+if Bat_Charge[0] > Bat_cap: # On vérifie qu'on ne dépasse pas le capacité de la batterie.
+    raise ValueError("On dépasse les capacités de la batterie!")
+Train_Seuil = 250000 # Seuil de puissance (négatif) auquel le train demande de l'énergie.
+Rheo_P = np.zeros(len(P_train)) # Puissance dissipée par le rhéostat.
+Rheo_P[0] = 0 # Le rhéostat ne dissipe rien au départ.
+
+for k in range(1, len(t)):
+    if P_train[k-1] < 0 and Bat_E[k-1] < Bat_cap: # Le train freine et la batterie n'est pas pleine.
+        Bat_E[k] = Bat_E[k-1]-P_train[k-1]
+        P_train[k] = 0
+        if Bat_E[k] > Bat_cap: # On dépasse la capacité de la batterie?
+            Diff = Bat_E[k] - Bat_cap
+            Bat_E[k] = Bat_cap
+            Rheo_P[k] = Diff # On dissipe dans le rhéostat.
+    if P_train[k] >= Train_Seuil and Bat_E[k-1] > 0: # Si le train demande de l'énergie et que la batterie n'est pas vide.
+        Bat_E[k] = Bat_E[k-1] - (P_train[k]-Train_Seuil)
+        P_train[k] = Train_Seuil
+        if Bat_E[k] < 0: # Dépasse-t-on les limites de la batterie?
+            Diff = -Bat_E[k]
+            Bat_E[k] = 0
+            P_train[k] += Diff
+
+# On recalcule ce qui a été modifié.
+P_LAC = np.zeros(len(P_train))
+for k in range(len(P_train)):
+    if P_train[k] > (V_SST**2)/(4*R_eq[k]):
+        P_LAC[k] = (V_SST**2)/(4*R_eq[k])-SysBor
+    else:
+        P_LAC[k] = P_train[k]
+
+
+"""
     AFFICHAGE
     =========
 """
 
 
 plt.figure("X,V,T du train")
-#Affichage position :
+# Affichage position :
 plt.subplot(3, 1, 1)
-plt.plot(t, x/1000, "-k", label="Position du train") #position normalisé en km
+plt.plot(t, x/1000, "-k", label="Position du train") # position normalisé en km
 plt.title("Position, vitesse, accélération du train en fonction du temps")
 plt.xlabel("Temps [s]")
 plt.ylabel("Longueur [km]")
 plt.grid()
 plt.legend()
 
-#Affichage vitesse :
+# Affichage vitesse :
 plt.subplot(3, 1, 2)
-plt.plot(t, v/1000, "-k", label="Vitesse du train") #vitesse normalisé en km/s
+plt.plot(t, v/1000, "-k", label="Vitesse du train") # vitesse normalisé en km/s
 plt.xlabel("Temps [s]")
 plt.ylabel("Vitesse [km/s]")
 plt.grid()
 plt.legend()
-#Affichage accélération :
+# Affichage accélération :
 plt.subplot(3, 1, 3)
-plt.plot(t, a/g, "-k", label="Accélération du train") #accélération normalisé en g
+plt.plot(t, a/g, "-k", label="Accélération du train") # accélération normalisé en g
 plt.xlabel("Temps [s]")
 plt.ylabel("Accélération [g]")
 plt.grid()
@@ -133,16 +175,16 @@ plt.legend()
 
 
 plt.figure("P,V,I du train")
-#Affichage de la puissance :
+# Affichage de la puissance :
 plt.subplot(3, 1, 1)
-plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") #P_train normalisé en MW
+plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") # P_train normalisé en MW
 plt.title("Puissance, tension et courant dans le train")
 plt.xlabel("Temps [s]")
 plt.ylabel("Puissance [MW]")
 plt.legend()
 plt.grid()
 
-#Affichage de la tension :
+# Affichage de la tension :
 plt.subplot(3, 1, 2)
 plt.plot(t, V_train, "-k", label="Tensions aux bornes de la locomotive")
 plt.legend()
@@ -150,7 +192,7 @@ plt.xlabel("Temps [s]")
 plt.ylabel("Tension [V]")
 plt.grid()
 
-#Affichage du courant :
+# Affichage du courant :
 plt.subplot(3, 1, 3)
 plt.plot(t, I_train, "-k", label="Courant traversant le train")
 plt.xlabel("Temps [s]")
@@ -199,4 +241,30 @@ plt.grid()
 plt.legend()
 plt.xlabel("Temps [s]")
 plt.ylabel("Puissance [MW]")
+
+# Affichage de l'énergie de la batterie, de la consommation du rhéostat et de l'énergie du train ainsi que de sa tension.
+plt.figure()
+plt.subplot(3, 1, 1)
+plt.plot(t, Bat_E/1000000, "-b", label="Énergie dans la batterie")
+plt.plot(t, Rheo_P/1000000, "-g", label="Somme des énergies perdues dans le rhéostat")
+plt.xlabel("Temps [s]")
+plt.ylabel("Énergie [MJ]")
+plt.grid()
+plt.legend()
+
+plt.subplot(3, 1, 2)
+plt.plot(t, P_train/1000000, "-k", label="Puissance consommée par le train")
+plt.xlabel("Temps [s]")
+plt.ylabel("Puissance [MW]")
+plt.grid()
+plt.legend()
+
+plt.subplot(3, 1, 3)
+plt.plot(t, V_train, "-k", label="Tension aux bornes du train")
+plt.xlabel("Temps [s]")
+plt.ylabel("Tension [V]")
+plt.grid()
+plt.legend()
+
+
 plt.show()
