@@ -118,7 +118,7 @@ Rheo_P[0] = 0 # Le rhéostat ne dissipe rien au départ.
 
 for k in range(1, len(t)):
     if P_train[k-1] < 0 and Bat_E[k-1] < 3600*Bat_cap: # Le train freine et la batterie n'est pas pleine.
-        Bat_E[k] = Bat_E[k-1]-P_train[k-1]
+        Bat_E[k] = Bat_E[k-1]+ abs(P_train[k-1])
         P_train[k] = 0
         if Bat_E[k] > 3600*Bat_cap: # On dépasse la capacité de la batterie?
             Diff = Bat_E[k] - Bat_cap
