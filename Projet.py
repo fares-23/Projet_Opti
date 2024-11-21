@@ -87,13 +87,23 @@ V_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*R_eq*P_LAC))
 # Courant tranversant le train.
 I_train = P_train/V_train
 
+# Courants dans chaque branche.
+I_1 = (V_SST-V_train)/(R_SST+R_LAC1+R_rail1)
+I_2 = (V_SST-V_train)/(R_SST+R_LAC2+R_rail2)
+
+# Puissances fournies par les sous-stations
+P_SST1 = I_1*V_SST
+P_SST2 = I_2*V_SST
+
 
 """
     AFFICHAGE
     =========
 """
-#Affichage position :
+
+
 plt.figure()
+#Affichage position :
 plt.subplot(3, 1, 1)
 plt.plot(t, x/1000, "-k", label="Position du train") #position normalisé en km
 plt.title("Position, vitesse, accélération du train en fonction du temps")
@@ -117,8 +127,9 @@ plt.ylabel("Accélération [g]")
 plt.grid()
 plt.legend()
 
-#Affichage de la puissance :
+
 plt.figure()
+#Affichage de la puissance :
 plt.subplot(3, 1, 1)
 plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") #P_train normalisé en MW
 plt.title("Puissance, tension et courant dans le train")
@@ -129,7 +140,7 @@ plt.grid()
 
 #Affichage de la tension :
 plt.subplot(3, 1, 2)
-plt.plot(t, V_train, "-b", label="Tensions aux bornes de la locomotive")
+plt.plot(t, V_train, "-k", label="Tensions aux bornes de la locomotive")
 plt.legend()
 plt.xlabel("Temps [s]")
 plt.ylabel("Tension [V]")
@@ -137,9 +148,34 @@ plt.grid()
 
 #Affichage du courant :
 plt.subplot(3, 1, 3)
-plt.plot(t, I_train, "-g", label="Courant traversant le train")
+plt.plot(t, I_train, "-k", label="Courant traversant le train")
 plt.xlabel("Temps [s]")
 plt.ylabel("Courant [A]")
+plt.legend()
+plt.grid()
+
+
+plt.figure()
+# Affichage de I_1, I_2 et I_train:
+plt.plot(t, I_1, "-b", label="I_1")
+plt.plot(t, I_2, "-g", label="I_2")
+plt.plot(t, I_train, "-k", label="I_train")
+plt.xlabel("Temps [s]")
+plt.ylabel("Courant [A]")
+plt.title("Courants dans les branches du circuit")
+plt.grid()
+plt.legend()
+
+
+plt.figure()
+# Puissance des stations et du train
+plt.plot(t, P_SST1/1000000, "-b", label="Sous-station 1") # normalisé en MW
+plt.plot(t, P_SST2/1000000, "-g", label="Sous-station 2") # normalisé en MW
+plt.plot(t, (P_SST1+P_SST2)/1000000, "-r", label="Puissance des stations") # normalisé en MW
+plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") # P_train normalisé en MW
+plt.xlabel("Temps [s]")
+plt.ylabel("Puissance [MW]")
+plt.title("Puissances mises en jeu")
 plt.legend()
 plt.grid()
 plt.show()
