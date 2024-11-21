@@ -10,12 +10,12 @@ import matplotlib.pyplot as plt
     =========
 """
 
-M = 70000000 # Masse du train.
+M = 70000 # Masse du train.
 A_0 = 780
-A_1 = 6.4*10**(-6)
+A_1 = 6.4*10**(-3)
 B_0 = 0
-B_1 = 0.14*3600*10**(-9)
-C_0 = 0.3634*3600**2*10**(-6)
+B_1 = 0.14*3.6*10**(-3)
+C_0 = 0.3634*3.6**2
 C_1 = 0
 alpha = 0 # Pente que le train doit gravir (compté positivement).
 g = 9.81 # Accélération de la pesanteur.
@@ -127,14 +127,6 @@ print(k)
 # plt.title("Puissance consommée par le train en fonction du temps")
 # plt.grid()
 # plt.show()
-
-
-plt.figure()
-plt.plot(t, (V_SST**2-4*Req*P_LAC), "-b", label="Truc")
-plt.legend()
-plt.xlabel("Temps [s]")
-plt.ylabel("SI")
-plt.grid()
 
 
 v_train = 0.5*(V_SST+np.sqrt(V_SST**2-4*Req*P_LAC))
