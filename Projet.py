@@ -92,42 +92,50 @@ I_train = P_train/V_train
     AFFICHAGE
     =========
 """
-
+#Affichage position :
 plt.figure()
 plt.subplot(3, 1, 1)
-plt.plot(t, x/1000, "-k", label="Position du train")
+plt.plot(t, x/1000, "-k", label="Position du train") #position normalisé en km
 plt.title("Position, vitesse, accélération du train en fonction du temps")
 plt.xlabel("Temps [s]")
 plt.ylabel("Longueur [km]")
 plt.grid()
 plt.legend()
+
+#Affichage vitesse :
 plt.subplot(3, 1, 2)
-plt.plot(t, v/1000, "-k", label="Vitesse du train")
+plt.plot(t, v/1000, "-k", label="Vitesse du train") #vitesse normalisé en km/s
 plt.xlabel("Temps [s]")
 plt.ylabel("Vitesse [km/s]")
 plt.grid()
 plt.legend()
+#Affichage accélération :
 plt.subplot(3, 1, 3)
-plt.plot(t, a/g, "-k", label="Accélération du train")
+plt.plot(t, a/g, "-k", label="Accélération du train") #accélération normalisé en g
 plt.xlabel("Temps [s]")
 plt.ylabel("Accélération [g]")
 plt.grid()
 plt.legend()
 
+#Affichage de la puissance :
 plt.figure()
 plt.subplot(3, 1, 1)
-plt.plot(t, P_train/1000000, "-k", label="Puissance consommée")
+plt.plot(t, P_train/1000000, "-k", label="Puissance consommée") #P_train normalisé en MW
 plt.title("Puissance, tension et courant dans le train")
 plt.xlabel("Temps [s]")
 plt.ylabel("Puissance [MW]")
 plt.legend()
 plt.grid()
+
+#Affichage de la tension :
 plt.subplot(3, 1, 2)
 plt.plot(t, V_train, "-b", label="Tensions aux bornes de la locomotive")
 plt.legend()
 plt.xlabel("Temps [s]")
 plt.ylabel("Tension [V]")
 plt.grid()
+
+#Affichage du courant :
 plt.subplot(3, 1, 3)
 plt.plot(t, I_train, "-g", label="Courant traversant le train")
 plt.xlabel("Temps [s]")
