@@ -247,10 +247,10 @@ plt.ylabel("Puissance [MW]")
 
 plt.figure("Bat_E, Rheo_P, P_train, V_train")
 # Affichage de l'énergie de la batterie, de la consommation du rhéostat et de l'énergie du train ainsi que de sa tension.
-plt.title("Gestion de la Batterie")
 plt.subplot(3, 1, 1)
 plt.plot(t, Bat_E/1000000, "-b", label="Énergie dans la batterie")
 plt.plot(t, Rheo_P/1000000, "-g", label="Énergie perdue dans le rhéostat")
+plt.title("Gestion de la Batterie")
 plt.xlabel("Temps [s]")
 plt.ylabel("Énergie [MJ]")
 plt.grid()
