@@ -20,7 +20,7 @@ C_0 = 0.3634*3.6**2
 C_1 = 0
 alpha = 0 # Pente que le train doit gravir (compté positivement).
 g = 9.81 # Accélération de la pesanteur.
-V_SST = 790 # Tension délivrée par la sous-station.
+V_SST = 790 # Tension délivrée par la sous-station (tension nominale).
 R_SST = 33*10**(-3) # Résistance interne de la sous-station.
 rho_LAC = 131*10**(-6) # Résistance linéique de la LAC.
 rho_rail = 18*10**(-6) # Résistance linéique des rails.
@@ -144,6 +144,10 @@ P_SST2 = I_2*V_SST
 P_SST1_loss = (R_SST+R_LAC1+R_rail1)*I_1**2
 P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
 
+# Valeur maximale entre V_SST et la tension aux bornes du train (indicateur de qualité).
+Ind_qual = V_SST - np.min(V_train)
+IndCrit = V_SST - 500 # Valeur critique du Ind_qual.
+
 
 
 """
@@ -151,7 +155,7 @@ P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
     =========
 """
 
-plt.figure("X,V,T du train")
+plt.figure("Position, vitesse, accélération du train en fonction du temps")
 # Affichage position :
 plt.subplot(3, 1, 1)
 plt.plot(t, x/1000, "-k", label="Position du train") # position normalisé en km
@@ -177,7 +181,7 @@ plt.grid()
 plt.legend()
 
 
-plt.figure("P,V,I du train")
+plt.figure("Puissance, tension et courant dans le train")
 # Affichage de la puissance :
 plt.subplot(3, 1, 1)
 plt.plot(t, P_train/1000000, "-k", label="Puissance consommée par le train") # P_train normalisé en MW
@@ -204,7 +208,7 @@ plt.legend()
 plt.grid()
 
 
-plt.figure("I_1, I_2, I_train")
+plt.figure("Courants dans les branches du circuit")
 # Affichage de I_1, I_2 et I_train:
 plt.plot(t, I_1, "-b", label="I_1")
 plt.plot(t, I_2, "-g", label="I_2")
@@ -216,7 +220,7 @@ plt.grid()
 plt.legend()
 
 
-plt.figure("P_SS1, P_SS2, P_train")
+plt.figure("Puissances mises en jeu")
 # Affichage Puissance des stations et du train
 plt.subplot(3, 1, 1)
 plt.plot(t, P_SST1/1000000, "-b", label="Sous-station 1") # normalisé en MW
@@ -245,7 +249,8 @@ plt.legend()
 plt.xlabel("Temps [s]")
 plt.ylabel("Puissance [MW]")
 
-plt.figure("Bat_E, Rheo_P, P_train, V_train")
+
+plt.figure("Gestion de la Batterie")
 # Affichage de l'énergie de la batterie, de la consommation du rhéostat et de l'énergie du train ainsi que de sa tension.
 plt.subplot(3, 1, 1)
 plt.plot(t, Bat_E/1000000, "-b", label="Énergie dans la batterie")
@@ -267,6 +272,15 @@ plt.subplot(3, 1, 3)
 plt.plot(t, V_train, "-k", label="Tension aux bornes du train")
 plt.xlabel("Temps [s]")
 plt.ylabel("Tension [V]")
+plt.grid()
+plt.legend()
+
+
+plt.figure("Indication de la Qualité du Système")
+# Comparaison, dans un histogramme, de Ind_qual et IndCrit.
+plt.bar(["Indicateur Critique\n(à ne pas dépasser)", "Indicateur Actuelle"], [IndCrit, Ind_qual], color="grey", edgecolor="black")
+plt.title("Indication de la Qualité du Système")
+plt.ylabel("Différence de Tension [V]")
 plt.grid()
 plt.legend()
 
