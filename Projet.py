@@ -322,14 +322,98 @@ def MonteCarlo(CapaBat):
 
 
 
+def non_dominant_sort(pop):
+    """
+        Renvoie les fronts, contenant différents individus suivant la dominance de ces derniers (1er front = les non-dominées, 2e front = les autres non-dominés, etc...).
+    """
+    fronts = []
+    front = []
+    for individual in pop:
+        dominated = False # Par défaut, on considère l'individu non-dominé.
+        for other in pop:
+            if other[0] < individual[0] and other[1] < individual[1]:
+                dominated = True # L'individu est dominé.
+                break
+        if not dominated:
+            front.append(individual) # On n'y met que les individus non-dominés.
+    fronts.append(front)
+    while len(front) > 0:
+        new_front = []
+        for individual in front:
+            for other in pop:
+                if individual[0] < other[0] and individual[1] < other[1] and (other not in front) and (other not in new_front):
+                    new_front.append(other)
+        fronts.append(new_front)
+        front = new_front
+    return fronts
+
+def crowded_dist(front):
+    """
+        Renvoie la 'crowded distance' du front.
+    """
+    distances = [0.0] * len(front)
+    for i in range(2): # 2 est le nombre de "buts" à atteindre (capacité batterie & chute de tension).
+        sorted_indices = sorted(range(len(front)), key=lambda k: front[k][i])
+        distances[sorted_indices[0]] = float("inf")
+        distances[sorted_indices[-1]] = float("inf")
+        for j in range(1, len(front) - 1):
+            distances[sorted_indices[j]] += (front[sorted_indices[j + 1]][i] - front[sorted_indices[j - 1]][i]) / (max(front, key=lambda k: k[i])[i] - min(front, key=lambda k: k[i])[i])
+    return distances
+
+def NSGA2(Bounds, Step, PopSize, NumGen, CrossProba=0.5, MutationProba=0.25):
+    """
+        Utilise l'algorithme NSGA-II pour trouver les meilleures solutions entre la capacité de la batterie et la chute de tension.
+
+        -PopSize: Taille de la population.
+        -NumGen: Nombre de générations à générer.
+        -Bounds: Intervalle des valeurs de la capacité de la batterie.
+        -Step: Écart entre deux valeurs adjacentes de la capacité de la batterie.
+        -CrossProba: Probabilité d'avoir une crossover (défaut: 0.5).
+        -MutationProba: Probabilité d'avoir une mutation (défaut: 0.1).
+    """
+    population = [[random.choice(np.arange(Bounds[0], Bounds[1], Step))] for _ in range(PopSize)]
+
+    # Évolution de la populace.
+    for _ in range(NumGen):
+        offspring = []
+        for _ in range(PopSize):
+            parent1, parent2 = random.sample(population, 2)
+            child = [0.5 * (parent1[0] + parent2[0])]
+            if random.random() < MutationProba:
+                child[0] += random.uniform(-Step, Step)
+                child[0] = max(Bounds[0], min(Bounds[1], child[0]))
+            offspring.append(child)
+        population = offspring
+        fronts = non_dominant_sort([[individual[0], Simulation(individual[0])] for individual in population])
+        distances = crowded_dist(fronts[0])
+        for i in range(len(fronts[0])):
+            fronts[0][i].append(distances[i])
+        population = [individual[:1] for individual in fronts[0]]
+
+    # Affichage.
+    for individual in population:
+        print(individual[0], Simulation(individual[0]))
+
+
+
+
+
 """
-    CŒUR DU PROGRAMME
-    =================
+    MONTE-CARLO
+    ===========
 """
 
-BatterieCapacite = []
+# BatterieCapacite = []
+#
+# for i in range(10, 10000, 10):
+#     BatterieCapacite.append(i)
+#
+# MonteCarlo(BatterieCapacite)
 
-for i in range(10, 10000, 10):
-    BatterieCapacite.append(i)
 
-MonteCarlo(BatterieCapacite)
+"""
+    NSGA-II
+    =======
+"""
+
+NSGA2([1000, 1500], 100, 100, 60)
