@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
 
 # IMPORTANT: Les unités sont toutes en SI, sauf indication contraire explicite.
@@ -291,7 +292,7 @@ def Simulation(Bat_cap):
     #
     # plt.show()
 
-    return Ind_qual # Indicateur de qualité.
+    return Ind_qual # Indicateur de qualité = Chute de tension maximale.
 
 
 
