@@ -146,7 +146,7 @@ P_SST2_loss = (R_SST+R_LAC2+R_rail2)*I_2**2
 
 # Valeur maximale entre V_SST et la tension aux bornes du train (indicateur de qualité).
 Ind_qual = V_SST - np.min(V_train)
-IndCrit = V_SST - 500 # Valeur critique du Ind_qual.
+IndCrit = V_SST - 500 # Valeur critique du Ind_qual, à ne pas dépasser.
 
 
 
