@@ -296,10 +296,14 @@ def Simulation(Bat_cap):
 
 
 
-def MonteCarlo(CapaBat):
+def MonteCarlo(CapaBat_max, CapaBat_min, CapaBat_step):
     """
         Teste de Monte-Carlo pour une liste de valeurs de capacités de batterie ainsi que de seuils de demandes d'énergie lorsque le train roule (ma poule).
     """
+    CapaBat = [] # Création des valeurs de la capacité de la batterie.
+    for i in range(CapaBat_max, CapaBat_min, CapaBat_step):
+        CapaBat.append(i)
+
     V_SST = 790 # Tension délivrée par la sous-station (tension nominale).
     IndCrit = V_SST - 500 # Valeur critique du Ind_qual, à ne pas dépasser.
     Sim = [] # Liste des paramètres de chaque simulation.
@@ -324,14 +328,14 @@ def MonteCarlo(CapaBat):
 
 def non_dominant_sort(pop):
     """
-        Renvoie les fronts, contenant différents individus suivant la dominance de ces derniers (1er front = les non-dominées, 2e front = les autres non-dominés, etc...).
+        Renvoie les rangs, contenant différents individus suivant la dominance de ces derniers (1er rang = les non-dominées, 2e rang = les autres non-dominés, etc...).
     """
     fronts = []
     front = []
     for individual in pop:
         dominated = False # Par défaut, on considère l'individu non-dominé.
         for other in pop:
-            if other[0] < individual[0] and other[1] < individual[1]:
+            if (other[0] < individual[0] and other[1] < individual[1]) or (other[0] <= individual[0] and other[1] < individual[1]) or (other[0] < individual[0] and other[1] <= individual[1]):
                 dominated = True # L'individu est dominé.
                 break
         if not dominated:
@@ -341,58 +345,72 @@ def non_dominant_sort(pop):
         new_front = []
         for individual in front:
             for other in pop:
-                if individual[0] < other[0] and individual[1] < other[1] and (other not in front) and (other not in new_front):
+                if ((individual[0] < other[0] and individual[1] < other[1]) or (individual[0] <= other[0] and individual[1] < other[1]) or (individual[0] < other[0] and individual[1] <= other[1])) and (other not in front) and (other not in new_front):
                     new_front.append(other)
         fronts.append(new_front)
         front = new_front
     return fronts
 
-def crowded_dist(front):
-    """
-        Renvoie la 'crowded distance' du front.
-    """
-    distances = [0.0] * len(front)
-    for i in range(2): # 2 est le nombre de "buts" à atteindre (capacité batterie & chute de tension).
-        sorted_indices = sorted(range(len(front)), key=lambda k: front[k][i])
-        distances[sorted_indices[0]] = float("inf")
-        distances[sorted_indices[-1]] = float("inf")
-        for j in range(1, len(front) - 1):
-            distances[sorted_indices[j]] += (front[sorted_indices[j + 1]][i] - front[sorted_indices[j - 1]][i]) / (max(front, key=lambda k: k[i])[i] - min(front, key=lambda k: k[i])[i])
-    return distances
-
 def NSGA2(Bounds, Step, PopSize, NumGen, CrossProba=0.5, MutationProba=0.25):
     """
         Utilise l'algorithme NSGA-II pour trouver les meilleures solutions entre la capacité de la batterie et la chute de tension.
 
-        -PopSize: Taille de la population.
-        -NumGen: Nombre de générations à générer.
-        -Bounds: Intervalle des valeurs de la capacité de la batterie.
-        -Step: Écart entre deux valeurs adjacentes de la capacité de la batterie.
-        -CrossProba: Probabilité d'avoir une crossover (défaut: 0.5).
-        -MutationProba: Probabilité d'avoir une mutation (défaut: 0.1).
+        - PopSize: Taille de la population.
+        - NumGen: Nombre de générations à générer.
+        - Bounds: Intervalle des valeurs de la capacité de la batterie.
+        - Step: Écart entre deux valeurs adjacentes de la capacité de la batterie.
+        - CrossProba: Probabilité d'avoir une crossover (défaut: 0.5).
+        - MutationProba: Probabilité d'avoir une mutation (défaut: 0.1).
     """
+    process = [] # Sauvegarde des populations.
     population = [[random.choice(np.arange(Bounds[0], Bounds[1], Step))] for _ in range(PopSize)]
+    process.append(population)
 
     # Évolution de la populace.
     for _ in range(NumGen):
-        offspring = []
-        for _ in range(PopSize):
-            parent1, parent2 = random.sample(population, 2)
-            child = [0.5 * (parent1[0] + parent2[0])]
-            if random.random() < MutationProba:
+        fronts = non_dominant_sort([[individual[0], Simulation(individual[0])] for individual in population]) # Classement des individus.
+        best = [] # Liste des meilleurs individus.
+        out = False
+        for front in fronts:
+            for individual in front:
+                best.append(individual) # On rajoute le meilleur.
+                if len(best) >= 0.5 * PopSize:
+                    out = True # On a sélectionné 50 % des meilleurs.
+                    break
+            if out:
+                break
+        offspring = [] # Liste des enfants.
+        for _ in range(PopSize): # On crée les enfants.
+            parent1, parent2 = random.sample(best, 2) # Sélection des parents.
+            child = [0.5 * (parent1[0] + parent2[0])] # Croisement.
+            if random.random() < MutationProba: # Mutation?
                 child[0] += random.uniform(-Step, Step)
                 child[0] = max(Bounds[0], min(Bounds[1], child[0]))
             offspring.append(child)
-        population = offspring
-        fronts = non_dominant_sort([[individual[0], Simulation(individual[0])] for individual in population])
-        distances = crowded_dist(fronts[0])
-        for i in range(len(fronts[0])):
-            fronts[0][i].append(distances[i])
-        population = [individual[:1] for individual in fronts[0]]
+        population = offspring # Nouvelle population.
+        process.append(population)
 
     # Affichage.
-    for individual in population:
-        print(individual[0], Simulation(individual[0]))
+    BatCap = []
+    Sim = []
+    for pop in process:
+        Sim_ = []
+        for individual in pop:
+            Sim_.append(Simulation(individual[0]))
+        BatCap.append(pop)
+        Sim.append(Sim_)
+    plt.figure("Résultats de NSGA-II")
+    for i in range(len(process)):
+        if i < len(process) - 1:
+            plt.plot(BatCap[i], Sim[i], "+g")
+        else:
+            plt.plot(BatCap[i], Sim[i], "+b") # Affichage de la dernière génération.
+    plt.title("Résultats de NSGA-II")
+    plt.xlabel("Capacité de la Batterie")
+    plt.ylabel("Chute de Tension [V]")
+    plt.grid()
+    plt.legend()
+    plt.show()
 
 
 
@@ -403,12 +421,7 @@ def NSGA2(Bounds, Step, PopSize, NumGen, CrossProba=0.5, MutationProba=0.25):
     ===========
 """
 
-# BatterieCapacite = []
-#
-# for i in range(10, 10000, 10):
-#     BatterieCapacite.append(i)
-#
-# MonteCarlo(BatterieCapacite)
+MonteCarlo(1000, 2000, 10)
 
 
 """
@@ -416,4 +429,4 @@ def NSGA2(Bounds, Step, PopSize, NumGen, CrossProba=0.5, MutationProba=0.25):
     =======
 """
 
-NSGA2([1000, 1500], 100, 100, 60)
+NSGA2([1000, 2000], 100, 50, 50)
