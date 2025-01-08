@@ -127,7 +127,7 @@ def Simulation(Bat_cap):
     P_LAC = np.zeros(len(P_train))
     for k in range(len(P_train)):
         if P_train[k] > (V_SST**2)/(4*R_eq[k]):
-            P_LAC[k] = (V_SST**2)/(4*R_eq[k])-SysBor
+            P_LAC[k] = (V_SST**2)/(4*R_eq[k])
         else:
             P_LAC[k] = P_train[k]
 
