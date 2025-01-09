@@ -65,7 +65,6 @@ def simutrain(Capabatterie,Pseuil):
     Psst1 = Vsst*I1 # W
     Psst2 = Vsst*I2 # W
 
-    Vtrain = np.zeros(len(temps)) # Création d'un vecteur de temps
 
     Vtrain = np.zeros(len(temps)) # Création d'un vecteur de temps
     #### Puissance et tension du train AVEC batterie ####
@@ -78,33 +77,37 @@ def simutrain(Capabatterie,Pseuil):
     Ebatterie = np.zeros(len(temps))
     Ebatterie[0] = Capabatterie
     # Définition du régime du train (accélération ou freinage)
-    for i in range(1,len(temps)):
+    for i in range(1, len(temps)):  # Boucle à travers les indices des données de temps (à partir du 2e élément).
         
-        if Ptrain[i] > Pseuil:
-            Plac[i] = Pseuil
-            Pbatterie[i] = (Ptrain[i]-Plac[i])/rbatterie
-            Ebatterie[i] = Ebatterie[i-1]-(Pbatterie[i]+Pbatterie[i-1])*0.5
-            if Ebatterie[i]<=0:
-                Ebatterie[i] = 0 
-                Plac[i] = Ptrain[i]
-                Pbatterie[i] = 0
-               
-        if Ptrain[i] < Pseuil and Ptrain[i] > 0:
-            Plac[i] = Ptrain[i]
-            Pbatterie[i] = 0
-            Ebatterie[i] = Ebatterie[i-1]
+        if Ptrain[i] > Pseuil:  # Cas où la puissance du train dépasse le seuil.
+            Plac[i] = Pseuil  # La puissance placée est limitée au seuil.
+            Pbatterie[i] = (Ptrain[i] - Plac[i]) / rbatterie  # Puissance fournie par la batterie (perte due à l'efficacité).
+            Ebatterie[i] = Ebatterie[i-1] - (Pbatterie[i] + Pbatterie[i-1]) * 0.5  # Mise à jour de l'énergie de la batterie.
+
+            if Ebatterie[i] <= 0:  # Si la batterie est vide :
+                Ebatterie[i] = 0  # L'énergie de la batterie ne peut pas descendre en dessous de 0.
+                Plac[i] = Ptrain[i]  # Toute la puissance est directement fournie au train.
+                Pbatterie[i] = 0  # La batterie ne contribue pas.
+
+        if Ptrain[i] < Pseuil and Ptrain[i] > 0:  # Cas où la puissance du train est en dessous du seuil.
+            Plac[i] = Ptrain[i]  # La puissance placée correspond exactement à la puissance du train.
+            Pbatterie[i] = 0  # La batterie n'est pas utilisée.
+            Ebatterie[i] = Ebatterie[i-1]  # L'énergie de la batterie reste inchangée.
+
+        if Ptrain[i] <= 0:  # Cas où le train freine (puissance négative ou nulle).
+            Plac[i] = 0  # La puissance placée est nulle pendant le freinage.
             
-        if Ptrain[i] <= 0:
-            Plac[i] = 0
-            if Ebatterie[i-1]>=Capabatterie:
-                Pbatterie[i] = 0
-                Ebatterie[i] = Capabatterie
-            else:
-                Pbatterie[i] = Ptrain[i]*rbatterie
-                Ebatterie[i] = Ebatterie[i-1]-(Pbatterie[i]+Pbatterie[i-1])*0.5
-                if Ebatterie[i]>Capabatterie:
-                    Ebatterie[i] = Capabatterie
-                
+            if Ebatterie[i-1] >= Capabatterie:  # Si la batterie est déjà pleine :
+                Pbatterie[i] = 0  # Pas de charge supplémentaire de la batterie.
+                Ebatterie[i] = Capabatterie  # L'énergie de la batterie reste à sa capacité maximale.
+            else:  # Sinon, la batterie peut être chargée.
+                Pbatterie[i] = Ptrain[i] * rbatterie  # Puissance régénérative fournie à la batterie (efficacité).
+                Ebatterie[i] = Ebatterie[i-1] - (Pbatterie[i] + Pbatterie[i-1]) * 0.5  # Mise à jour de l'énergie.
+
+                if Ebatterie[i] > Capabatterie:  # Vérification après mise à jour :
+                    Ebatterie[i] = Capabatterie  # L'énergie est limitée à la capacité maximale.
+
+                    
     #Calcul Vtrain           
     for i in range(len(temps)):
         if (Vsst**2)-(4*Req[i]*Plac[i])>0:
