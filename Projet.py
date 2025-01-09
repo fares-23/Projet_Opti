@@ -331,7 +331,7 @@ def non_dominant_sort(pop):
         for individual in population:
             dominated = False # On suppose que l'individu n'est pas dominé.
             for other in population:
-                if (other[0] < individual[0] and other[1] <= individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] < individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] <= individual[1] and other[2] < individual[2]):
+                if (other[0] <= individual[0] and other[2] <= individual[2] and other != individual):
                     dominated = True # L'individu est dominé.
                     break
             if not dominated:
