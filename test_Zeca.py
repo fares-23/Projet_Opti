@@ -226,7 +226,7 @@ axs[0].scatter(pareto_capacites, pareto_chutes, color="red", label="Front de Par
 axs[0].scatter(best_capacite, best_chute, color="green", label="Meilleures solutions")
 axs[0].set_xlabel("Capacité de la batterie (kWh)")
 axs[0].set_ylabel("Chute de tension maximale (V)")
-axs[0].set_title("Optimisation bi-objectifs : Capacité vs Chute de tension maximale")
+axs[0].set_title("Espace des objectifs")
 axs[0].legend()
 axs[0].grid()
 
