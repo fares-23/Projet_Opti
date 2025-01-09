@@ -295,142 +295,101 @@ def Simulation(Bat_cap, Train_Seuil):
 print(Simulation(100000, 350000))
 def non_dominant_sort(pop):
     """
-        Renvoie les rangs, contenant différents individus suivant la dominance de ces derniers (1er rang = les non-dominées, 2e rang = les autres non-dominés, etc...).
+        Renvoie les rangs, contenant différents individus suivant la dominance de ces derniers (1er rang = les non-dominées, 2e rang = les autres non-dominés, etc).
     """
     fronts = []
-    front = []
-    for individual in pop:
-        dominated = False # Par défaut, on considère l'individu non-dominé.
-        for other in pop:
-            if (other[0] < individual[0] and other[1] <= individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] < individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] <= individual[1] and other[2] < individual[2]):
-                dominated = True # L'individu est dominé.
-                break
-        if not dominated:
-            front.append(individual) # On n'y met que les individus non-dominés.
-    fronts.append(front)
-    while len(front) > 0:
-        new_front = []
-        for individual in front:
-            for other in pop:
+    front = [] # Premier rang.
+    population = pop[:] # Initialisation de la population.
+    while len(population) > 0:
+        for individual in population:
+            dominated = False # On suppose que l'individu n'est pas dominé.
+            for other in population:
                 if (other[0] < individual[0] and other[1] <= individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] < individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] <= individual[1] and other[2] < individual[2]):
-                    new_front.append(other)
-        fronts.append(new_front)
-        front = new_front
+                    dominated = True # L'individu est dominé.
+                    break
+            if not dominated:
+                front.append(individual)
+        if len(front) == 0:
+            front = population
+        fronts.append(front)
+        for individual in front:
+            population.remove(individual) # On retire les individus déjà classés.
+        front = [] # On réinitialise le premier rang.
     return fronts
 
 
-
-def MonteCarlo(CapaBat_min, CapaBat_max, CapaBat_step, Seuil_min, Seuil_max, Seuil_step):
+def select_half_best(fronts, popSize):
     """
-        Teste de Monte-Carlo pour une liste de valeurs de capacités de batterie ainsi que de seuils de demandes d'énergie lorsque le train roule (ma poule).
+        Retourne une liste des 50% meilleurs individus de rangs.
     """
-    population = []
-    CapaBat = [] # Création des valeurs de la capacité de la batterie.
-    for i in range(CapaBat_min, CapaBat_max, CapaBat_step):
-        CapaBat.append(i)
-    TrainSeuil = [] # Création des valeurs du seuil.
-    for i in range(Seuil_min, Seuil_max, Seuil_step):
-        TrainSeuil.append(i)
-
-    for capa in CapaBat:
-        for seuil in TrainSeuil:
-            population.append([capa, seuil, Simulation(capa, seuil)]) # Création des individus.
-    fronts = non_dominant_sort(population) # Rangement des individus.
-
-    # Affichage des résultats.
-    plt.figure("Espace des Solutions / Espace des Objectifs")
-    plt.subplot(2, 1, 1)
-    for fronts in fronts[:0]:
-        for individual in fronts:
-            plt.plot(individual[0], individual[1], "+k")
-    for individual in fronts[0]:
-        plt.plot(individual[0], individual[1], "+k")
-    plt.xlabel("Capacités de la Batterie [Wh]")
-    plt.ylabel("Seuils [J]")
-    plt.title("Espace des Solutions / Espace des Objectifs")
-    plt.grid()
-
-    plt.subplot(2, 1, 2)
-    for front in fronts[:0]:
+    best = []
+    for front in fronts:
         for individual in front:
-            plt.plot(fronts[0], Simulation(individual[0], individual[1]), "+k")
-    for individual in fronts[0]:
-        plt.plot(individual[0], Simulation(individual[0], individual[1]), "+b") # Dernière génération.
-    plt.xlabel("Capacités de la Batterie [Wh]")
-    plt.ylabel("Chutes de Tension [V]")
-    plt.grid()
+            best.append(individual)
+            if len(best) >= popSize // 2:
+                return best
+    return best
 
 
-
-def NSGA2(Bounds_Capa, Step_Capa, Bounds_Seuil, Step_Seuil, PopSize, NumGen, CrossProba=0.5, MutationProba=0.25):
+def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     """
-        Utilise l'algorithme NSGA-II pour trouver les meilleures solutions entre la capacité de la batterie et la chute de tension.
+        Algorithme NSGA-II (simpififé).
 
+        - CapaLim: [Capacité Minimale, Capacité Maximale]
+        - CapaStep: Pas pour la capacité.
+        - SeuilLim: [Seuil_Mini, Seuil_Maxi]
+        - SeuilStep: Pas du seuil.
         - PopSize: Taille de la population.
-        - NumGen: Nombre de générations à générer.
-        - Bounds_Capa: Intervalle des valeurs de la capacité de la batterie.
-        - Step_Capa: Écart entre deux valeurs adjacentes de la capacité de la batterie.
-        - Bouds_Seuil: Intervalle des valeurs du seuil.
-        - Step_Seuil: Étape entre chaque valeur du seuil.
-        - CrossProba: Probabilité d'avoir une crossover (défaut: 0.5).
-        - MutationProba: Probabilité d'avoir une mutation (défaut: 0.1).
+        - N: Nombre d'itérations.
+        - mutant: Probabilité d'une mutation.
     """
-    process = [] # Sauvegarde des populations.
-    population = [[random.choice(np.arange(Bounds_Capa[0], Bounds_Capa[1], Step_Capa)), random.choice(np.arange(Bounds_Seuil[0], Bounds_Seuil[1], Step_Seuil))] for _ in range(PopSize)]
-    process.append(population)
-    V_SST = 790 # Tension délivrée par la sous-station (tension nominale).
+    process = [] # Ensemble des populations.
+    population = [] # Création de la population.
+    for _ in range(PopSize):
+        capa = random.choice(np.arange(CapaLim[0], CapaLim[1], CapaStep))
+        seuil = random.choice(np.arange(SeuilLim[0], SeuilLim[1], SeuilStep))
+        population.append([capa, seuil, Simulation(capa, seuil)])
 
-    # Évolution de la populace.
-    for _ in range(NumGen):
-        fronts = non_dominant_sort([[individual[0], individual[1], Simulation(individual[0], individual[1])] for individual in population]) # Classement des individus.
-        best = [] # Liste des meilleurs individus.
-        out = False
-        for front in fronts:
-            for individual in front:
-                best.append(individual) # On rajoute le meilleur.
-                if len(best) >= 0.5 * PopSize:
-                    out = True # On a sélectionné 50 % des meilleurs.
-                    break
-            if out:
-                break
-        offspring = [] # Liste des enfants.
-        if len(best) < 2: # Ensuring best is big enough.
-            best = population
-        for _ in range(PopSize): # On crée les enfants.
-            parent1, parent2 = random.sample(best, 2) # Sélection des parents.
-            child = [0.5 * (parent1[0] + parent2[0]), 0.5 * (parent1[1] + parent2[1])] # Croisement.
-            if random.random() < MutationProba: # Mutation de la batterie?
-                child[0] += random.uniform(-Step_Capa, Step_Capa)
-                child[0] = max(Bounds_Capa[0], min(Bounds_Capa[1], child[0]))
-            if random.random() < MutationProba: # Mutation du seuil?
-                child[1] += random.uniform(-Step_Seuil, Step_Seuil)
-                child[1] = max(Bounds_Seuil[0], min(Bounds_Seuil[1], child[0]))
-            offspring.append(child)
-        population = offspring # Nouvelle population.
+    for _ in range(N):
+        fronts = non_dominant_sort(population)
+        best = select_half_best(fronts, PopSize)
+        new_pop = [] # Nouvelle génération.
+        for _ in range(PopSize):
+            parent1, parent2 = random.sample(best, 2)
+            capa = (parent1[0] + parent2[0]) * 0.5
+            seuil = (parent1[1] + parent2[1]) * 0.5
+            if random.random() <= mutant: # Mutation de la capa?
+                capa += random.uniform(-CapaStep, CapaStep)
+                capa = max(CapaLim[0], min(CapaLim[1], capa)) # On vérifie si on ne dépasse pas.
+            if random.random() <= mutant: # Mutation du seuil?
+                seuil += random.uniform(-SeuilStep, SeuilStep)
+                seuil = max(SeuilLim[0], min(SeuilLim[1], seuil)) # On vérifie si on ne dépasse pas.
+            child = [capa, seuil, Simulation(capa, seuil)] # Création d'un nouvel individu.
+            new_pop.append(child)
         process.append(population)
+        population = new_pop # MÀJ.
 
-    # Affichage.
-    plt.figure("Espace des Solutions / Espace des Objectifs")
+    # Affichage:
+    plt.figure("NSGA-II")
     plt.subplot(2, 1, 1)
     for pop in process[:-1]:
         for individual in pop:
             plt.plot(individual[0], individual[1], "+k")
     for individual in process[-1]:
-        plt.plot(individual[0], individual[1], "+b") # Dernière génération.
+        plt.plot(individual[0], individual[1], "+b")
+    plt.title("Espace des Solutions / Espace des Objectifs")
     plt.xlabel("Capacités de la Batterie [Wh]")
     plt.ylabel("Seuils [J]")
-    plt.title("Espace des Solutions / Espace des Objectifs")
-    plt.grid()
-
     plt.subplot(2, 1, 2)
     for pop in process[:-1]:
         for individual in pop:
-            plt.plot(individual[0], Simulation(individual[0], individual[1]), "+k")
+            plt.plot(individual[0], individual[2], "+k")
     for individual in process[-1]:
-        plt.plot(individual[0], Simulation(individual[0], individual[1]), "+b") # Dernière génération.
+        plt.plot(individual[0], individual[2], "+b")
     plt.xlabel("Capacités de la Batterie [Wh]")
     plt.ylabel("Chutes de Tension [V]")
     plt.grid()
+
 
 
 
@@ -440,7 +399,7 @@ def NSGA2(Bounds_Capa, Step_Capa, Bounds_Seuil, Step_Seuil, PopSize, NumGen, Cro
     ===================
 """
 
-Simulation(10000, 300000)
+# Simulation(10000, 300000)
 
 
 
@@ -449,7 +408,7 @@ Simulation(10000, 300000)
     ===========
 """
 
-# MonteCarlo(1000, 10000, 1000, 0, 1000000, 100000)
+# MonteCarlo(1000, 10000, 100, 0, 1000000, 10000)
 
 
 """
@@ -457,6 +416,6 @@ Simulation(10000, 300000)
     =======
 """
 
-# NSGA2([1000, 10000], 1000, [0, 100000], 100, 50, 50)
+NSGA2([1000, 10000], 1000, [0, 100000], 100, 50, 50)
 
 plt.show()
