@@ -147,32 +147,6 @@ def Simulation(Bat_cap,seuil):
 
 
 
-def non_dominant_sort(pop):
-    """
-        Renvoie les rangs, contenant différents individus suivant la dominance de ces derniers (1er rang = les non-dominées, 2e rang = les autres non-dominés, etc).
-    """
-    fronts = []
-    front = [] # Premier rang.
-    population = pop[:] # Initialisation de la population.
-    while len(population) > 0:
-        for individual in population:
-            dominated = False # On suppose que l'individu n'est pas dominé.
-            for other in population:
-                if (other[0] < individual[0] and other[1] <= individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] < individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] <= individual[1] and other[2] < individual[2]):
-                    dominated = True # L'individu est dominé.
-                    break
-            if not dominated:
-                front.append(individual[:])
-        if len(front) == 0:
-            front = population[:]
-        fronts.append(front[:])
-        for individual in front:
-            population.remove(individual) # On retire les individus déjà classés.
-        front = [] # On réinitialise le premier rang.
-    return fronts
-
-
-
 def MonteCarlo():
     capacites = np.linspace(0, 14000, 1000)  # Capacité batterie en kWh
     seuils = np.linspace(0, 1e6, 1000)  # Seuil de puissance (W)
