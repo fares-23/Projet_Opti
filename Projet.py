@@ -274,6 +274,7 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     plt.title("Espace des Solutions / Espace des Objectifs")
     plt.xlabel("Capacités de la Batterie [kWh]")
     plt.ylabel("Seuils [kW]")
+    plt.grid()
     plt.subplot(2, 1, 2)
     for pop in process[:-1]:
         for individual in pop:
@@ -346,7 +347,7 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     =======
 """
 
-NSGA2([1000, 15000], 1000, [0, 350000], 10000, 20, 60)
+NSGA2([1000, 15000], 1000, [0, 350000], 10000, 10, 25)
 
 
 plt.show()
