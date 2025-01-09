@@ -89,8 +89,6 @@ def simutrain(Capabatterie,Pseuil):
                 Plac[i] = Ptrain[i]
                 Pbatterie[i] = 0
                
-                
-           
         if Ptrain[i] < Pseuil and Ptrain[i] > 0:
             Plac[i] = Ptrain[i]
             Pbatterie[i] = 0
@@ -171,3 +169,5 @@ plt.title("Espace des objectifs")
 plt.grid(visible=True)
 
 plt.show()
+
+print(simutrain(100000, 350000))

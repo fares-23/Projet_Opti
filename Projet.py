@@ -292,7 +292,7 @@ def Simulation(Bat_cap, Train_Seuil):
 
     return Ind_qual # Indicateur de qualité = Chute de tension maximale.
 
-
+print(Simulation(100000, 350000))
 def non_dominant_sort(pop):
     """
         Renvoie les rangs, contenant différents individus suivant la dominance de ces derniers (1er rang = les non-dominées, 2e rang = les autres non-dominés, etc...).
