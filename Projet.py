@@ -296,7 +296,7 @@ def Simulation(Bat_cap):
 
 
 
-def MonteCarlo(CapaBat_min, CapaBat_miax, CapaBat_step):
+def MonteCarlo(CapaBat_min, CapaBat_max, CapaBat_step):
     """
         Teste de Monte-Carlo pour une liste de valeurs de capacités de batterie ainsi que de seuils de demandes d'énergie lorsque le train roule (ma poule).
     """
@@ -365,6 +365,7 @@ def NSGA2(Bounds, Step, PopSize, NumGen, CrossProba=0.5, MutationProba=0.25):
     process = [] # Sauvegarde des populations.
     population = [[random.choice(np.arange(Bounds[0], Bounds[1], Step))] for _ in range(PopSize)]
     process.append(population)
+    V_SST = 790 # Tension délivrée par la sous-station (tension nominale).
 
     # Évolution de la populace.
     for _ in range(NumGen):
@@ -405,7 +406,9 @@ def NSGA2(Bounds, Step, PopSize, NumGen, CrossProba=0.5, MutationProba=0.25):
             plt.plot(BatCap[i], Sim[i], "+g")
         else:
             plt.plot(BatCap[i], Sim[i], "+b") # Affichage de la dernière génération.
+    IndCrit = V_SST - 500 # Valeur critique du Ind_qual, à ne pas dépasser.
     plt.title("Résultats de NSGA-II")
+    plt.axhline(y=IndCrit, color="red", linestyle="-")
     plt.xlabel("Capacité de la Batterie")
     plt.ylabel("Chute de Tension [V]")
     plt.grid()
