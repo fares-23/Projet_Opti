@@ -108,6 +108,15 @@ for capacite, seuil in couples_aleatoires:
     chute_tension_max = Vsst - min(V_train)  # Chute de tension maximale
     solutions.append((capacite, seuil, chute_tension_max))
 
+capacites, seuils, chute_tension_max_values = zip(*solutions)
+plt.figure(figsize=(6, 4))
+plt.scatter(capacites, chute_tension_max_values)  # Scatter plot de l'espace des solutions
+plt.title("Espace des solutions", fontsize=14)
+plt.xlabel("Capacité de la batterie (kWh)", fontsize=12)
+plt.ylabel("Puissance P_seuil (kW)", fontsize=12)
+plt.grid(True)
+plt.show()
+
 # Extraction du front de Pareto
 pareto_solutions = []
 for sol in solutions:
@@ -133,55 +142,55 @@ def choisir_meilleur_point(pareto_front, poids_capacite, poids_chute):
     meilleur_indice = np.argmin(scores)
     return pareto_front[meilleur_indice]
 
-best_capacite,best_seuil,best_chute = choisir_meilleur_point(pareto_solutions, 1, 17)
-print(f"Meilleure solution : Capacité = {best_capacite} Wh, Chute de tension maximale = {best_chute} V")
-print("Marge de sécurité : ", Vsst - best_chute - 500, "V")
+# best_capacite,best_seuil,best_chute = choisir_meilleur_point(pareto_solutions, 1, 17)
+# print(f"Meilleure solution : Capacité = {best_capacite} Wh, Chute de tension maximale = {best_chute} V")
+# print("Marge de sécurité : ", Vsst - best_chute - 500, "V")
 
-plt.figure(figsize=(10, 6))
-plt.scatter([sol[0] for sol in solutions], [sol[2] for sol in solutions], alpha=0.3, label="Solutions Monte Carlo")
-plt.scatter(pareto_capacites, pareto_chutes, color="red", label="Front de Pareto")
-plt.scatter(best_capacite, best_chute, color="green", label="Meilleure solution")
-plt.xlabel("Capacité de la batterie (kWh)")
-plt.ylabel("Chute de tension maximale (V)")
-plt.title("Optimisation bi-objectifs : Capacité vs Chute de tension maximale")
-plt.legend()
-plt.grid()
+# plt.figure(figsize=(10, 6))
+# plt.scatter([sol[0] for sol in solutions], [sol[2] for sol in solutions], alpha=0.3, label="Solutions Monte Carlo")
+# plt.scatter(pareto_capacites, pareto_chutes, color="red", label="Front de Pareto")
+# plt.scatter(best_capacite, best_chute, color="green", label="Meilleure solution")
+# plt.xlabel("Capacité de la batterie (kWh)")
+# plt.ylabel("Chute de tension maximale (V)")
+# plt.title("Optimisation bi-objectifs : Capacité vs Chute de tension maximale")
+# plt.legend()
+# plt.grid()
 
 
-# Calculer les graphes pour la meilleure capacité et le meilleur seuil trouvés
-V_train, P_train_opt, P_rheo, charge_batterie = calculer_P_train_avec_batterie(best_capacite, P_train, temps, vitesse, best_seuil)
+# # Calculer les graphes pour la meilleure capacité et le meilleur seuil trouvés
+# V_train, P_train_opt, P_rheo, charge_batterie = calculer_P_train_avec_batterie(best_capacite, P_train, temps, vitesse, best_seuil)
 
-# Tracer les graphes
-plt.figure(figsize=(14, 10))
+# # Tracer les graphes
+# plt.figure(figsize=(14, 10))
 
-# Graphique 1 : Puissance
-plt.subplot(3, 1, 1)
-plt.plot(temps, P_train_opt, label="Puissance effective (W)")
-plt.plot(temps, P_rheo, label="Puissance dissipée (rhéostatique, W)")
-plt.xlabel("Temps (s)")
-plt.ylabel("Puissance (W)")
-plt.title("Puissance en fonction du temps")
-plt.legend()
-plt.grid()
+# # Graphique 1 : Puissance
+# plt.subplot(3, 1, 1)
+# plt.plot(temps, P_train_opt, label="Puissance effective (W)")
+# plt.plot(temps, P_rheo, label="Puissance dissipée (rhéostatique, W)")
+# plt.xlabel("Temps (s)")
+# plt.ylabel("Puissance (W)")
+# plt.title("Puissance en fonction du temps")
+# plt.legend()
+# plt.grid()
 
-# Graphique 2 : Tension
-plt.subplot(3, 1, 2)
-plt.plot(temps, V_train, label="Tension (V)")
-plt.axhline(790, color="red", linestyle="--", label="Tension nominale (790V)")
-plt.xlabel("Temps (s)")
-plt.ylabel("Tension (V)")
-plt.title("Tension en fonction du temps")
-plt.legend()
-plt.grid()
+# # Graphique 2 : Tension
+# plt.subplot(3, 1, 2)
+# plt.plot(temps, V_train, label="Tension (V)")
+# plt.axhline(790, color="red", linestyle="--", label="Tension nominale (790V)")
+# plt.xlabel("Temps (s)")
+# plt.ylabel("Tension (V)")
+# plt.title("Tension en fonction du temps")
+# plt.legend()
+# plt.grid()
 
-# Graphique 3 : Charge de la batterie
-plt.subplot(3, 1, 3)
-plt.plot(temps, charge_batterie, label="Charge de la batterie (kWh)")
-plt.xlabel("Temps (s)")
-plt.ylabel("Charge (Wh)")
-plt.title("Charge de la batterie en fonction du temps")
-plt.legend()
-plt.grid()
+# # Graphique 3 : Charge de la batterie
+# plt.subplot(3, 1, 3)
+# plt.plot(temps, charge_batterie, label="Charge de la batterie (kWh)")
+# plt.xlabel("Temps (s)")
+# plt.ylabel("Charge (Wh)")
+# plt.title("Charge de la batterie en fonction du temps")
+# plt.legend()
+# plt.grid()
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
