@@ -292,7 +292,7 @@ def Simulation(Bat_cap, Train_Seuil):
 
     return Ind_qual # Indicateur de qualité = Chute de tension maximale.
 
-print(Simulation(100000, 350000))
+
 def non_dominant_sort(pop):
     """
         Renvoie les rangs, contenant différents individus suivant la dominance de ces derniers (1er rang = les non-dominées, 2e rang = les autres non-dominés, etc).
@@ -308,10 +308,37 @@ def non_dominant_sort(pop):
                     dominated = True # L'individu est dominé.
                     break
             if not dominated:
-                front.append(individual)
+                front.append(individual[:])
         if len(front) == 0:
-            front = population
-        fronts.append(front)
+            front = population[:]
+        fronts.append(front[:])
+        for individual in front:
+            population.remove(individual) # On retire les individus déjà classés.
+        front = [] # On réinitialise le premier rang.
+    return fronts
+
+
+
+
+def non_dominant_sort(pop):
+    """
+        Renvoie les rangs, contenant différents individus suivant la dominance de ces derniers (1er rang = les non-dominées, 2e rang = les autres non-dominés, etc).
+    """
+    fronts = []
+    front = [] # Premier rang.
+    population = pop[:] # Initialisation de la population.
+    while len(population) > 0:
+        for individual in population:
+            dominated = False # On suppose que l'individu n'est pas dominé.
+            for other in population:
+                if (other[0] < individual[0] and other[1] <= individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] < individual[1] and other[2] <= individual[2]) or (other[0] <= individual[0] and other[1] <= individual[1] and other[2] < individual[2]):
+                    dominated = True # L'individu est dominé.
+                    break
+            if not dominated:
+                front.append(individual[:])
+        if len(front) == 0:
+            front = population[:]
+        fronts.append(front[:])
         for individual in front:
             population.remove(individual) # On retire les individus déjà classés.
         front = [] # On réinitialise le premier rang.
@@ -358,16 +385,21 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
             parent1, parent2 = random.sample(best, 2)
             capa = (parent1[0] + parent2[0]) * 0.5
             seuil = (parent1[1] + parent2[1]) * 0.5
-            if random.random() <= mutant: # Mutation de la capa?
+            if random.random() <= mutant: # Mutation?
                 capa += random.uniform(-CapaStep, CapaStep)
-                capa = max(CapaLim[0], min(CapaLim[1], capa)) # On vérifie si on ne dépasse pas.
-            if random.random() <= mutant: # Mutation du seuil?
                 seuil += random.uniform(-SeuilStep, SeuilStep)
-                seuil = max(SeuilLim[0], min(SeuilLim[1], seuil)) # On vérifie si on ne dépasse pas.
+            if capa < CapaLim[0]:
+                capa = CapaLim[0]
+            if capa > CapaLim[1]:
+                capa = CapaLim[1]
+            if seuil < SeuilLim[0]:
+                seuil = SeuilLim[0]
+            if seuil > SeuilLim[1]:
+                seuil = SeuilLim[1]
             child = [capa, seuil, Simulation(capa, seuil)] # Création d'un nouvel individu.
-            new_pop.append(child)
-        process.append(population)
-        population = new_pop # MÀJ.
+            new_pop.append(child[:])
+        process.append(population[:])
+        population = new_pop[:] # MÀJ.
 
     # Affichage:
     plt.figure("NSGA-II")
@@ -379,7 +411,7 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
         plt.plot(individual[0], individual[1], "+b")
     plt.title("Espace des Solutions / Espace des Objectifs")
     plt.xlabel("Capacités de la Batterie [Wh]")
-    plt.ylabel("Seuils [J]")
+    plt.ylabel("Seuils [W]")
     plt.subplot(2, 1, 2)
     for pop in process[:-1]:
         for individual in pop:
@@ -416,6 +448,6 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     =======
 """
 
-NSGA2([1000, 10000], 1000, [0, 100000], 100, 50, 50)
+NSGA2([1000, 10000], 1000, [0, 100000], 10000, 25, 50)
 
 plt.show()
