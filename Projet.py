@@ -196,6 +196,16 @@ def MonteCarlo():
 
     return solutions
 
+def choisir_meilleur_point(pareto_front, poids_capacite, poids_chute):
+    scores = []
+    for point in pareto_front:
+        capacite, _ , chute = point
+        score = poids_capacite * capacite + poids_chute * chute
+        scores.append(score)
+
+    meilleur_indice = np.argmin(scores)
+    return pareto_front[meilleur_indice]
+
 
 
 def non_dominant_sort(pop):
@@ -318,7 +328,43 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     ===========
 """
 
-# MonteCarlo(1000, 10000, 100, 0, 1000000, 10000)
+solutions = MonteCarlo()
+sol = non_dominant_sort(solutions)
+non_dominés = sol[0]
+
+capacites = [solu[0] for solu in solutions]
+seuils = [solu[1] for solu in solutions]
+chutes = [solu[2] for solu in solutions]
+
+pareto_capacites = [solu[0] for solu in non_dominés]
+pareto_chutes = [solu[2] for solu in non_dominés]
+pareto_seuils = [solu[1] for solu in non_dominés]
+
+best_capacite,best_seuil,best_chute = choisir_meilleur_point(non_dominés, 1, 17)
+
+fig, axs = plt.subplots(1, 2, figsize=(12, 5))  # Create a figure with 2 subplots side by side
+
+# First subplot: Capacité vs Chute de tension maximale
+axs[0].scatter(capacites, chutes, alpha=0.3, label="Solutions Monte Carlo")
+axs[0].scatter(pareto_capacites, pareto_chutes, color="red", label="Front de Pareto")
+axs[0].scatter(best_capacite, best_chute, color="green", label="Meilleures solutions")
+axs[0].set_xlabel("Capacité de la batterie (Wh)")
+axs[0].set_ylabel("Chute de tension maximale (V)")
+axs[0].set_title("Espace des objectifs")
+axs[0].legend()
+axs[0].grid()
+
+# Second subplot: Capacité vs Puissance Seuil
+axs[1].scatter(capacites, seuils, alpha=0.3, label="Solutions Monte Carlo")
+axs[1].scatter(pareto_capacites, pareto_seuils, color="red", label="Front de Pareto")
+axs[1].scatter(best_capacite, best_seuil, color="green", label="Meilleures solutions")
+axs[1].set_xlabel("Capacité de la batterie (Wh)")
+axs[1].set_ylabel("Puissance Seuil (W)")
+axs[1].set_title("Espace des solutions")
+# Uncomment if legend is desired
+# axs[1].legend()
+axs[1].grid()
+
 
 
 """
@@ -326,6 +372,6 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     =======
 """
 
-NSGA2([1000, 10000], 1000, [0, 100000], 10000, 10, 20)
+# NSGA2([1000, 10000], 1000, [0, 100000], 10000, 10, 20)
 
 plt.show()
