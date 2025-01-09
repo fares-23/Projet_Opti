@@ -151,15 +151,15 @@ def Simulation_2(Bat_cap,P_seuil):
     # Valeur maximale entre V_SST et la tension aux bornes du train (indicateur de qualité).
     Ind_qual = V_SST - np.min(V_train)
     IndCrit = V_SST - 500 # Valeur critique du Ind_qual, à ne pas dépasser.
-
+    
     return Ind_qual
 
 def Paires_P_seuil_CapaBat():
     Chute_tension = []
-    Capa = np.linspace(0,10,1000) #kWh
+    Capa = np.linspace(0,14,1000) #kWh
     P_seuil = np.linspace(0,1000,1000) #kW
     solutions = [(C,P) for C in Capa for P in P_seuil]
-    echantillonnage = random.sample(solutions,1000) #Distribution normale de couples Capa/P_seuil
+    echantillonnage = random.sample(solutions,1000) #Distribution normale de couples
     C = [sol[0] for sol in echantillonnage]
     P = [sol[1] for sol in echantillonnage]
     for sol in echantillonnage:
@@ -175,7 +175,16 @@ def Paires_P_seuil_CapaBat():
     # plt.grid(True)
     # plt.show()
     
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(8, 4))
+    
+    plt.subplot(221)
+    plt.scatter(C, P)  # Scatter plot de l'espace des solutions
+    plt.title("Espace des objectifs", fontsize=14)
+    plt.xlabel("Capacité de la batterie (kWh)", fontsize=12)
+    plt.ylabel("Puissance seuil (kW)", fontsize=12)
+    plt.grid(True)
+    
+    plt.subplot(222)
     plt.scatter(C, Chute_tension)  # Scatter plot de l'espace des solutions
     plt.title("Espace des objectifs", fontsize=14)
     plt.xlabel("Capacité de la batterie (kWh)", fontsize=12)
@@ -184,6 +193,7 @@ def Paires_P_seuil_CapaBat():
     plt.show()
 
 Paires_P_seuil_CapaBat()
+
 
 def MonteCarlo(CapaBat_max, CapaBat_min, CapaBat_step):
     """
