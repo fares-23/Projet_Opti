@@ -27,8 +27,8 @@ def Simulation(Bat_cap):
     g = 9.81 # Accélération de la pesanteur.
     V_SST = 790 # Tension délivrée par la sous-station (tension nominale).
     R_SST = 33*10**(-3) # Résistance interne de la sous-station.
-    rho_LAC = 131*10**(-6) # Résistance linéique de la LAC.
-    rho_rail = 18*10**(-6) # Résistance linéique des rails.
+    rho_LAC = 95*10**(-6) # Résistance linéique de la LAC.
+    rho_rail = 10*10**(-6) # Résistance linéique des rails.
     x_Tot = 5000 # Distance totale que le train doit parcourir durant son trajet.
     SysBor = 35000 # Consommation du système de bord.
     rend = 0.8 # Rendement du moteur+convertisseurs.
@@ -296,12 +296,12 @@ def Simulation(Bat_cap):
 
 
 
-def MonteCarlo(CapaBat_max, CapaBat_min, CapaBat_step):
+def MonteCarlo(CapaBat_min, CapaBat_miax, CapaBat_step):
     """
         Teste de Monte-Carlo pour une liste de valeurs de capacités de batterie ainsi que de seuils de demandes d'énergie lorsque le train roule (ma poule).
     """
     CapaBat = [] # Création des valeurs de la capacité de la batterie.
-    for i in range(CapaBat_max, CapaBat_min, CapaBat_step):
+    for i in range(CapaBat_min, CapaBat_max, CapaBat_step):
         CapaBat.append(i)
 
     V_SST = 790 # Tension délivrée par la sous-station (tension nominale).
