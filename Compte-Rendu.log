@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.10.7)  10 JAN 2025 13:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.10.7)  10 JAN 2025 14:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1968,11 +1968,11 @@ l.60     \newpage
 
 ]
 LaTeX Font Info:    Font shape `T1/txr/b/n' in size <14.4> not available
-(Font)              Font shape `T1/txr/bx/n' tried instead on input line 61.
+(Font)              Font shape `T1/txr/bx/n' tried instead on input line 63.
 LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <14.4> not available
-(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 62.
+(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 74.
 LaTeX Font Info:    Font shape `T1/txr/b/n' in size <10.95> not available
-(Font)              Font shape `T1/txr/bx/n' tried instead on input line 66.
+(Font)              Font shape `T1/txr/bx/n' tried instead on input line 86.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1987,7 +1987,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.66 \end{document}
+l.86 \end{document}
                     [1] (./Compte-Rendu.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
@@ -2004,10 +2004,10 @@ Package logreq Info: Writing requests to 'Compte-Rendu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 43239 strings out of 474998
- 842182 string characters out of 5767950
- 1927975 words of memory out of 5000000
- 64597 multiletter control sequences out of 15000+600000
+ 43241 strings out of 474998
+ 842205 string characters out of 5767950
+ 1930975 words of memory out of 5000000
+ 64599 multiletter control sequences out of 15000+600000
  606674 words of font info for 128 fonts, out of 8000000 for 9000
  788 hyphenation exceptions out of 8191
  101i,11n,107p,1137b,2458s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -2015,7 +2015,7 @@ Here is how much of TeX's memory you used:
 are/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fon
 ts/type1/urw/times/utmr8a.pfb>
-Output written on Compte-Rendu.pdf (3 pages, 41047 bytes).
+Output written on Compte-Rendu.pdf (3 pages, 44523 bytes).
 PDF statistics:
  108 PDF objects out of 1000 (max. 8388607)
  70 compressed objects within 1 object stream
