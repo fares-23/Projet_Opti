@@ -112,9 +112,9 @@
             \label{fig:non_dominant_sort}
         \end{figure}
 
-        Comme affiché sur la figure \ref{fig:NSGA2}, les solutions intéressantes pour notre batterie semblent se trouver aux alentours de $1$ ou $2$~kWh, pour un seuil vers les $300$~kW et une chute de $200$~V (les points rouges représentant la dernière génération créée par notre algorithme).
+        Comme affiché sur la figure \ref{fig:NSGA2}, les solutions intéressantes pour notre batterie semblent se trouver aux alentours de $1,5$ ou $2$~kWh, pour un seuil vers les $300$~kW et une chute de $200$~V (les points rouges représentant la dernière génération créée par notre algorithme).
         Suivant la simulation, les résultats peuvent énormément changer, et il est conseiller de relancer plusieurs fois l'algorithme afin de trouver des solutions potentiellement meilleures.
-        Par ailleurs, étant donné l'absence de \guillemotleft{}~\emph{crowding\_distance}~\guillemotright{}, nommé \guillemotleft{}~critère de distance~\guillemotright{} en français, nos solutions tendent à se rassembler en un amas compact; augmenter la mutation peut sensiblement améliorer ce problème.
+        Par ailleurs, étant donné l'absence de \guillemotleft{}~\emph{crowding\_distance}~\guillemotright{}, nommé \guillemotleft{}~critère de distance~\guillemotright{} en français, nos solutions tendent à se rassembler en un amas compact; augmenter le taux de mutation peut sensiblement améliorer ce problème.
 
         \begin{figure}[H]
             \centering
@@ -125,7 +125,20 @@
 
 
     \section*{Conclusion}\addcontentsline{toc}{section}{Conclusion}
+        Pour conclure, nous pouvons dire que l'algorithme NSGA-II est plus efficace que la méthode Monte-Carlo; en revanche, Monte-Carlo s'étend dès le départ sur un maximum de résultats, là où NSGA-II (en particulier notre version simplfifée) peut rester coincé à quelques valeurs seulement (d'où l'intérêt d'avoir une population suffisamment large, et un taux de mutation pas trop bas, mais trop haut non plus).
 
+        Comme résultat final, nous pouvons mettre en avant une batterie de capacité $1,5$~kWh et un seuil de $300$~kW auquel le train commence à demander de l'énergie à la batterie.
+        Les résultats sont donnés en figure \ref{fig:Con}, pour de tels paramètres.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Figures/Bat_F.png}
+            \includegraphics[width=0.75\textwidth]{Figures/Qual_F.png}
+            \caption{Résultats de la simulation du train, pour une batterie de capacité $1,5$~kWh et un seuil de $300$~kW (paramètres optimisés selon l'algorithme NSGA-II).}
+            \label{fig:Con}
+        \end{figure}
+
+        Évidemment, d'autres batteries avec seuil optimisés sont également disponibles (revoir figure \ref{fig:NSGA2}).
 
 \end{document}
 
