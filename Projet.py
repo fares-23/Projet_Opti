@@ -254,7 +254,8 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
         plt.ylabel("Énergie [MJ]")
         plt.grid()
         plt.legend()
-
+        plt.legend(loc='upper right')  # Déplace la légende en haut à droite
+        
         plt.subplot(3, 1, 2)
         plt.plot(t, P_train/1000000, "-k", label="Puissance consommée par le train")
         plt.xlabel("Temps [s]")
@@ -277,12 +278,10 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
         plt.ylabel("Différence de Tension [V]")
         plt.grid()
         plt.legend()
-
+        
 
 
     return Ind_qual # Indicateur de qualité = Chute de tension maximale.
-
-
 
 def MonteCarlo():
     capacites = np.linspace(0, 14000, 1000)  # Capacité batterie en kWh
@@ -317,8 +316,6 @@ def choisir_meilleur_point(pareto_front, poids_capacite, poids_chute):
     meilleur_indice = np.argmin(scores)
     return pareto_front[meilleur_indice]
 
-
-
 def non_dominant_sort(pop):
     """
         Renvoie les rangs, contenant différents individus suivant la dominance de ces derniers (1er rang = les non-dominées, 2e rang = les autres non-dominés, etc).
@@ -343,7 +340,6 @@ def non_dominant_sort(pop):
         front = [] # On réinitialise le premier rang.
     return fronts
 
-
 def select_half_best(fronts, popSize):
     """
         Retourne une liste des 50% meilleurs individus de rangs.
@@ -355,7 +351,6 @@ def select_half_best(fronts, popSize):
             if len(best) >= popSize // 2:
                 return best
     return best
-
 
 def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     """
@@ -434,18 +429,11 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     plt.legend()
     plt.grid()
 
-
-
-
-
 """
     Teste de SIMULATION
     ===================
 """
-
-Simulation(10000, 300000, True)
-
-
+#Simulation(10000, 300000, True)
 
 """
     MONTE-CARLO
@@ -465,6 +453,8 @@ pareto_chutes = [solu[2] for solu in non_dominés]
 pareto_seuils = [solu[1] for solu in non_dominés]
 
 best_capacite,best_seuil,best_chute = choisir_meilleur_point(non_dominés, 1, 17)
+
+Simulation(best_capacite, best_seuil, True) # Meilleure solution.
 
 fig, axs = plt.subplots(1, 2, figsize=(12, 5))  # Create a figure with 2 subplots side by side
 plt.get_current_fig_manager().set_window_title('Monte-Carlo') # Nom de la fenêtre
