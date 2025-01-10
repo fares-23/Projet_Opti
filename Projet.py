@@ -436,7 +436,7 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     Teste de SIMULATION
     ===================
 """
-Simulation(10000, 400000, True)
+Simulation(10000, 280000, True)
 
 """
     MONTE-CARLO
