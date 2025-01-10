@@ -467,6 +467,9 @@ pareto_seuils = [solu[1] for solu in non_dominés]
 best_capacite,best_seuil,best_chute = choisir_meilleur_point(non_dominés, 1, 17)
 
 fig, axs = plt.subplots(1, 2, figsize=(12, 5))  # Create a figure with 2 subplots side by side
+plt.get_current_fig_manager().set_window_title('Monte-Carlo') # Nom de la fenêtre
+
+
 
 # First subplot: Capacité vs Chute de tension maximale
 axs[0].scatter(capacites, chutes, alpha=0.3, label="Solutions Monte Carlo")
