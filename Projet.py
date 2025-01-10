@@ -158,6 +158,7 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
         plt.ylabel("Longueur [km]")
         plt.grid()
         plt.legend()
+        plt.legend(loc='upper right')  # Déplace la légende en haut à droite
 
         # Affichage vitesse :
         plt.subplot(3, 1, 2)
@@ -166,6 +167,8 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
         plt.ylabel("Vitesse [km/s]")
         plt.grid()
         plt.legend()
+        plt.legend(loc='upper right')  # Déplace la légende en haut à droite
+        
         # Affichage accélération :
         plt.subplot(3, 1, 3)
         plt.plot(t, a/g, "-k", label="Accélération du train") # Accélération normalisée en g.
@@ -173,7 +176,7 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
         plt.ylabel("Accélération [g]")
         plt.grid()
         plt.legend()
-
+        plt.legend(loc='upper right')  # Déplace la légende en haut à droite
 
         plt.figure("Puissance, tension et courant dans le train")
         # Affichage de la puissance :
@@ -433,7 +436,7 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     Teste de SIMULATION
     ===================
 """
-#Simulation(10000, 300000, True)
+Simulation(10000, 400000, True)
 
 """
     MONTE-CARLO
@@ -454,7 +457,7 @@ pareto_seuils = [solu[1] for solu in non_dominés]
 
 best_capacite,best_seuil,best_chute = choisir_meilleur_point(non_dominés, 1, 17)
 
-Simulation(best_capacite, best_seuil, True) # Meilleure solution.
+#Simulation(best_capacite, best_seuil, True) # Meilleure solution.
 
 fig, axs = plt.subplots(1, 2, figsize=(12, 5))  # Create a figure with 2 subplots side by side
 plt.get_current_fig_manager().set_window_title('Monte-Carlo') # Nom de la fenêtre
