@@ -276,7 +276,7 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
 
         plt.figure("Indication de la Qualité du Système")
         # Comparaison, dans un histogramme, de Ind_qual et IndCrit.
-        plt.bar(["Indicateur Critique\n(à ne pas dépasser)", "Indicateur Actuelle"], [IndCrit, Ind_qual], color="grey", edgecolor="black")
+        plt.bar(["Indicateur Critique\n(à ne pas dépasser)", "Indicateur Actuel"], [IndCrit, Ind_qual], color="grey", edgecolor="black")
         plt.title("Indication de la Qualité du Système")
         plt.ylabel("Différence de Tension [V]")
         plt.grid()
