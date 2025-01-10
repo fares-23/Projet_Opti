@@ -80,6 +80,32 @@
 
 
     \section*{Algorithme NSGA-II}\addcontentsline{toc}{section}{Algorithme NSGA-II}
+        L'algorithme génétique NSGA-II permet de trouver les meilleures solutions dans un contexte donné de façon assez efficace.
+        Cet algorithme génère une population de taille $N$ d'individus (les solutions), puis recherche au sein de cette population les \guillemotleft{}~solutions non-dominées~\guillemotright{}, et les range en suivant cette ordre:
+
+        ---~En premier, les solutions non-dominées, c'est-à-dire celles qui dominent toutes le autres, les meilleures de la population.
+
+        ---~En deuxième, les solutions non-dominées qui restent, en ayant retirées les solutions précédentes.
+
+        ---~ En troisième, les solutions non-dominées restantes, en ayant retirées toutes les précédentes.
+
+        ---~On continue jusqu'à épuisement des individus dans la population de départ.
+
+        Ayant maintenant à notre diposition un classement des individus selon leurs performances, on sélectionne les $50\%{}$ meilleurs dans ce classement, puis les croisons afin de créer la génération suivante.
+        Puis le cycle recommence, pour un total de $N$ itérations.
+
+        Il faut savoir que NSGA-II, demandant un classement des solutions selon leur dominance, doit utiliser une fonction qui classe les solutions selon cette ordre. Pour ceux qui regarderait notre code, il s'agit de la fonction \texttt{non\_dominant\_sort()}.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Figures/NSGA-II.png}
+            \caption{Résultats de l'algorithme NSGA-II.}
+            \label{fig:NSGA2}
+        \end{figure}
+
+        Comme affiché sur la figure \ref{fig:NSGA2}, les solutions intéressantes pour notre batterie semblent se trouver aux alentours de $1$ ou $2$~kWh, pour un seuil vers les $275$~kW et une chute de $225$~V (le points rouges représentant la dernière génération créée par notre algorithme).
+        Suivant la simulation, les résultats peuvent énormément changer, et il est conseiller de relancer plusieurs fois l'algorithme afin de trouver des solutions potentiellement meilleures.
+        Par ailleurs, étant donné l'absence de \guillemotleft{}~\emph{crowding\_distance}~\guillemotright{}, nommé \guillemotleft{}~critère de distance~\guillemotright{} en français, nos solutions tendent à se rassembler en un amas compact; augmenter la mutation peut sensiblement améliorer ce problème.
 
 
     \section*{Conclusion}\addcontentsline{toc}{section}{Conclusion}

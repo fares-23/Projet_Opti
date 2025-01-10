@@ -6,4 +6,4 @@
 \contentsline {section}{Avec Batterie}{1}{section*.5}%
 \contentsline {section}{Monte-Carlo}{1}{section*.6}%
 \contentsline {section}{Algorithme NSGA-II}{1}{section*.7}%
-\contentsline {section}{Conclusion}{1}{section*.8}%
+\contentsline {section}{Conclusion}{2}{section*.9}%
