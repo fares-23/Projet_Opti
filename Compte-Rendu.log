@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.10.7)  10 JAN 2025 16:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.10.7)  10 JAN 2025 17:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1969,7 +1969,7 @@ l.60     \newpage
 ]
 LaTeX Font Info:    Font shape `T1/txr/b/n' in size <14.4> not available
 (Font)              Font shape `T1/txr/bx/n' tried instead on input line 63.
-<Figures/Schematic.png, id=95, 825.83531pt x 228.10219pt>
+<Figures/Schematic.png, id=100, 825.83531pt x 228.10219pt>
 File: Figures/Schematic.png Graphic file (type png)
 <use Figures/Schematic.png>
 Package pdftex.def Info: Figures/Schematic.png  used on input line 76.
@@ -1978,7 +1978,7 @@ LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <14.4> not available
 (Font)              Font shape `T1/txtt/bx/n' tried instead on input line 81.
 LaTeX Font Info:    Font shape `T1/txr/b/n' in size <12> not available
 (Font)              Font shape `T1/txr/bx/n' tried instead on input line 82.
-<Figures/xvf.png, id=97, 462.528pt x 346.896pt>
+<Figures/xvf.png, id=102, 462.528pt x 346.896pt>
 File: Figures/xvf.png Graphic file (type png)
 <use Figures/xvf.png>
 Package pdftex.def Info: Figures/xvf.png  used on input line 91.
@@ -2002,20 +2002,20 @@ been already used, duplicate ignored
 l.99             E
                   nsuite, la puissance du train a été déterminée en int�...
 [1 <./Figures/Schematic.png> <./Figures/xvf.png>]
-<Figures/AdamCode_0.png, id=107, 658.46pt x 345.29pt>
+<Figures/AdamCode_0.png, id=112, 658.46pt x 345.29pt>
 File: Figures/AdamCode_0.png Graphic file (type png)
 <use Figures/AdamCode_0.png>
 Package pdftex.def Info: Figures/AdamCode_0.png  used on input line 104.
 (pdftex.def)             Requested size: 362.77264pt x 190.23672pt.
-<Figures/AdamCode_1.png, id=109, 627.34375pt x 336.25626pt>
+<Figures/AdamCode_1.png, id=114, 627.34375pt x 336.25626pt>
 File: Figures/AdamCode_1.png Graphic file (type png)
 <use Figures/AdamCode_1.png>
-Package pdftex.def Info: Figures/AdamCode_1.png  used on input line 119.
+Package pdftex.def Info: Figures/AdamCode_1.png  used on input line 118.
 (pdftex.def)             Requested size: 362.77264pt x 194.4541pt.
-<Figures/AdamCode_2.png, id=110, 606.265pt x 257.96375pt>
+<Figures/AdamCode_2.png, id=115, 606.265pt x 257.96375pt>
 File: Figures/AdamCode_2.png Graphic file (type png)
 <use Figures/AdamCode_2.png>
-Package pdftex.def Info: Figures/AdamCode_2.png  used on input line 128.
+Package pdftex.def Info: Figures/AdamCode_2.png  used on input line 127.
 (pdftex.def)             Requested size: 362.77264pt x 154.35826pt.
 
 
@@ -2027,15 +2027,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [2 <./Figures/AdamCode_0.png> <./Figures/AdamCode_1.png>]
-<Figures/PTI.png, id=119, 462.528pt x 346.896pt>
+<Figures/PTI.png, id=124, 462.528pt x 346.896pt>
 File: Figures/PTI.png Graphic file (type png)
 <use Figures/PTI.png>
-Package pdftex.def Info: Figures/PTI.png  used on input line 145.
+Package pdftex.def Info: Figures/PTI.png  used on input line 144.
 (pdftex.def)             Requested size: 362.77264pt x 272.09163pt.
-<Figures/Bat.png, id=120, 462.528pt x 346.896pt>
+<Figures/Bat.png, id=125, 462.528pt x 346.896pt>
 File: Figures/Bat.png Graphic file (type png)
 <use Figures/Bat.png>
-Package pdftex.def Info: Figures/Bat.png  used on input line 160.
+Package pdftex.def Info: Figures/Bat.png  used on input line 157.
 (pdftex.def)             Requested size: 362.77264pt x 272.09163pt.
 
 
@@ -2047,15 +2047,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [3 <./Figures/AdamCode_2.png> <./Figures/PTI.png>]
-<Figures/P.png, id=133, 462.528pt x 346.896pt>
+<Figures/P.png, id=139, 462.528pt x 346.896pt>
 File: Figures/P.png Graphic file (type png)
 <use Figures/P.png>
-Package pdftex.def Info: Figures/P.png  used on input line 173.
+Package pdftex.def Info: Figures/P.png  used on input line 169.
 (pdftex.def)             Requested size: 362.77264pt x 272.09163pt.
-<Figures/I.png, id=134, 462.528pt x 346.896pt>
+<Figures/I.png, id=140, 462.528pt x 346.896pt>
 File: Figures/I.png Graphic file (type png)
 <use Figures/I.png>
-Package pdftex.def Info: Figures/I.png  used on input line 174.
+Package pdftex.def Info: Figures/I.png  used on input line 170.
 (pdftex.def)             Requested size: 362.77264pt x 272.09163pt.
 
 
@@ -2067,10 +2067,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [4 <./Figures/Bat.png>]
-<Figures/Qual.png, id=141, 462.528pt x 346.896pt>
+<Figures/Qual.png, id=148, 462.528pt x 346.896pt>
 File: Figures/Qual.png Graphic file (type png)
 <use Figures/Qual.png>
-Package pdftex.def Info: Figures/Qual.png  used on input line 185.
+Package pdftex.def Info: Figures/Qual.png  used on input line 181.
 (pdftex.def)             Requested size: 362.77264pt x 272.09163pt.
 
 
@@ -2082,19 +2082,19 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [5 <./Figures/P.png> <./Figures/I.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 191--192
+Underfull \hbox (badness 10000) in paragraph at lines 187--188
 
  []
 
 LaTeX Font Info:    Trying to load font information for TS1+txr on input line 1
-98.
+94.
 (/usr/share/texlive/texmf-dist/tex/latex/txfonts/ts1txr.fd
 File: ts1txr.fd 2000/12/15 v3.1
 )
-<espace_solution.png, id=150, 433.62pt x 361.35pt>
+<espace_solution.png, id=156, 433.62pt x 361.35pt>
 File: espace_solution.png Graphic file (type png)
 <use espace_solution.png>
-Package pdftex.def Info: espace_solution.png  used on input line 209.
+Package pdftex.def Info: espace_solution.png  used on input line 205.
 (pdftex.def)             Requested size: 239.0012pt x 199.16928pt.
 
 
@@ -2106,20 +2106,20 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [6 <./Figures/Qual.png>]
-<espace_objectifs.png, id=161, 433.62pt x 361.35pt>
+<espace_objectifs.png, id=167, 433.62pt x 361.35pt>
 File: espace_objectifs.png Graphic file (type png)
 <use espace_objectifs.png>
-Package pdftex.def Info: espace_objectifs.png  used on input line 217.
+Package pdftex.def Info: espace_objectifs.png  used on input line 213.
 (pdftex.def)             Requested size: 239.0012pt x 199.16928pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 221--222
+Underfull \hbox (badness 10000) in paragraph at lines 217--218
 
  []
 
-<Monte-Carlo_pareto.png, id=162, 867.24pt x 361.35pt>
+<Monte-Carlo_pareto.png, id=168, 867.24pt x 361.35pt>
 File: Monte-Carlo_pareto.png Graphic file (type png)
 <use Monte-Carlo_pareto.png>
-Package pdftex.def Info: Monte-Carlo_pareto.png  used on input line 227.
+Package pdftex.def Info: Monte-Carlo_pareto.png  used on input line 223.
 (pdftex.def)             Requested size: 478.00243pt x 199.16928pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -2130,20 +2130,20 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [7 <./espace_solution.png> <./espace_objectifs.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 231--232
+Underfull \hbox (badness 10000) in paragraph at lines 227--228
 
  []
 
-<Monte-Carlo_meilleur_solution.png, id=171, 867.24pt x 361.35pt>
+<Monte-Carlo_meilleur_solution.png, id=177, 867.24pt x 361.35pt>
 File: Monte-Carlo_meilleur_solution.png Graphic file (type png)
 <use Monte-Carlo_meilleur_solution.png>
 Package pdftex.def Info: Monte-Carlo_meilleur_solution.png  used on input line 
-238.
+234.
 (pdftex.def)             Requested size: 478.00243pt x 199.16928pt.
-<Monte-Carlo.png, id=172, 867.24pt x 361.35pt>
+<Monte-Carlo.png, id=178, 867.24pt x 361.35pt>
 File: Monte-Carlo.png Graphic file (type png)
 <use Monte-Carlo.png>
-Package pdftex.def Info: Monte-Carlo.png  used on input line 247.
+Package pdftex.def Info: Monte-Carlo.png  used on input line 243.
 (pdftex.def)             Requested size: 478.00243pt x 199.16928pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -2154,15 +2154,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [8 <./Monte-Carlo_pareto.png> <./Monte-Carlo_meilleur_solution.png>]
-<Monte-Carlo(1).png, id=182, 867.24pt x 361.35pt>
+<Monte-Carlo(1).png, id=188, 867.24pt x 361.35pt>
 File: Monte-Carlo(1).png Graphic file (type png)
 <use Monte-Carlo(1).png>
-Package pdftex.def Info: Monte-Carlo(1).png  used on input line 253.
+Package pdftex.def Info: Monte-Carlo(1).png  used on input line 249.
 (pdftex.def)             Requested size: 478.00243pt x 199.16928pt.
-<Monte-Carlo(2).png, id=183, 867.24pt x 361.35pt>
+<Monte-Carlo(2).png, id=189, 867.24pt x 361.35pt>
 File: Monte-Carlo(2).png Graphic file (type png)
 <use Monte-Carlo(2).png>
-Package pdftex.def Info: Monte-Carlo(2).png  used on input line 259.
+Package pdftex.def Info: Monte-Carlo(2).png  used on input line 255.
 (pdftex.def)             Requested size: 478.00243pt x 199.16928pt.
 
 
@@ -2174,20 +2174,20 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [9 <./Monte-Carlo.png> <./Monte-Carlo(1).png> <./Monte-Carlo(2).png>]
-<Monte-Carlo_5000.png, id=194, 867.24pt x 361.35pt>
+<Monte-Carlo_5000.png, id=201, 867.24pt x 361.35pt>
 File: Monte-Carlo_5000.png Graphic file (type png)
 <use Monte-Carlo_5000.png>
-Package pdftex.def Info: Monte-Carlo_5000.png  used on input line 267.
+Package pdftex.def Info: Monte-Carlo_5000.png  used on input line 263.
 (pdftex.def)             Requested size: 478.00243pt x 199.16928pt.
-<Monte-Carlo_5000(1).png, id=195, 867.24pt x 361.35pt>
+<Monte-Carlo_5000(1).png, id=202, 867.24pt x 361.35pt>
 File: Monte-Carlo_5000(1).png Graphic file (type png)
 <use Monte-Carlo_5000(1).png>
-Package pdftex.def Info: Monte-Carlo_5000(1).png  used on input line 273.
+Package pdftex.def Info: Monte-Carlo_5000(1).png  used on input line 269.
 (pdftex.def)             Requested size: 478.00243pt x 199.16928pt.
-<Monte-Carlo_5000(2).png, id=196, 867.24pt x 361.35pt>
+<Monte-Carlo_5000(2).png, id=203, 867.24pt x 361.35pt>
 File: Monte-Carlo_5000(2).png Graphic file (type png)
 <use Monte-Carlo_5000(2).png>
-Package pdftex.def Info: Monte-Carlo_5000(2).png  used on input line 279.
+Package pdftex.def Info: Monte-Carlo_5000(2).png  used on input line 275.
 (pdftex.def)             Requested size: 478.00243pt x 199.16928pt.
 
 
@@ -2199,41 +2199,52 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [10 <./Monte-Carlo_5000.png> <./Monte-Carlo_5000(1).png>]
-<Figures/non_dominant_sort.png, id=207, 1119.43219pt x 329.73187pt>
+<Figures/non_dominant_sort.png, id=213, 1119.43219pt x 329.73187pt>
 File: Figures/non_dominant_sort.png Graphic file (type png)
 <use Figures/non_dominant_sort.png>
-Package pdftex.def Info: Figures/non_dominant_sort.png  used on input line 304.
+Package pdftex.def Info: Figures/non_dominant_sort.png  used on input line 302.
 
 (pdftex.def)             Requested size: 483.69687pt x 142.47624pt.
-<Figures/select_half_best.png, id=209, 446.41782pt x 158.09062pt>
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[11 <./Monte-Carlo_5000(2).png>]
+<Figures/select_half_best.png, id=223, 446.41782pt x 158.09062pt>
 File: Figures/select_half_best.png Graphic file (type png)
 <use Figures/select_half_best.png>
-Package pdftex.def Info: Figures/select_half_best.png  used on input line 313.
+Package pdftex.def Info: Figures/select_half_best.png  used on input line 311.
 (pdftex.def)             Requested size: 362.77264pt x 128.47002pt.
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[11 <./Monte-Carlo_5000(2).png> <./Figures/non_dominant_sort.png>]
-<Figures/NSGA-II.png, id=221, 552.1428pt x 291.2481pt>
+<Figures/NSGA-II.png, id=225, 552.1428pt x 291.2481pt>
 File: Figures/NSGA-II.png Graphic file (type png)
 <use Figures/NSGA-II.png>
-Package pdftex.def Info: Figures/NSGA-II.png  used on input line 324.
+Package pdftex.def Info: Figures/NSGA-II.png  used on input line 322.
 (pdftex.def)             Requested size: 362.77264pt x 191.36217pt.
-<Figures/Bat_F.png, id=223, 462.528pt x 346.896pt>
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[12 <./Figures/non_dominant_sort.png> <./Figures/select_half_best.png> <./Figur
+es/NSGA-II.png>]
+<Figures/Bat_F.png, id=236, 462.528pt x 346.896pt>
 File: Figures/Bat_F.png Graphic file (type png)
 <use Figures/Bat_F.png>
-Package pdftex.def Info: Figures/Bat_F.png  used on input line 338.
+Package pdftex.def Info: Figures/Bat_F.png  used on input line 336.
 (pdftex.def)             Requested size: 362.77264pt x 272.09163pt.
-<Figures/Qual_F.png, id=224, 462.528pt x 346.896pt>
+<Figures/Qual_F.png, id=237, 462.528pt x 346.896pt>
 File: Figures/Qual_F.png Graphic file (type png)
 <use Figures/Qual_F.png>
-Package pdftex.def Info: Figures/Qual_F.png  used on input line 339.
+Package pdftex.def Info: Figures/Qual_F.png  used on input line 337.
 (pdftex.def)             Requested size: 362.77264pt x 272.09163pt.
 
 
@@ -2244,7 +2255,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[12 <./Figures/select_half_best.png> <./Figures/NSGA-II.png>]
+[13 <./Figures/Bat_F.png> <./Figures/Qual_F.png>]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -2253,7 +2264,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[13 <./Figures/Bat_F.png> <./Figures/Qual_F.png>] (./Compte-Rendu.aux)
+[14] (./Compte-Rendu.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -2263,16 +2274,16 @@ L3 programming layer <2024-01-22>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `Compte-Rendu.out' has not changed.
-(rerunfilecheck)             Checksum: 13C16D3B8C0547F4AD00F14D5698A97E;1171.
+(rerunfilecheck)             Checksum: D65F9858539D3940F8BD8359499FBAE6;1340.
 Package logreq Info: Writing requests to 'Compte-Rendu.run.xml'.
 \openout1 = `Compte-Rendu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 43540 strings out of 474998
- 848580 string characters out of 5767950
- 1935975 words of memory out of 5000000
- 64842 multiletter control sequences out of 15000+600000
+ 43543 strings out of 474998
+ 848611 string characters out of 5767950
+ 1934975 words of memory out of 5000000
+ 64843 multiletter control sequences out of 15000+600000
  622828 words of font info for 143 fonts, out of 8000000 for 9000
  788 hyphenation exceptions out of 8191
  101i,12n,107p,1137b,2458s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -2286,10 +2297,10 @@ fb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/txsy.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/urw/times/utmri8a.pfb>
-Output written on Compte-Rendu.pdf (15 pages, 3451761 bytes).
+Output written on Compte-Rendu.pdf (16 pages, 3452955 bytes).
 PDF statistics:
- 302 PDF objects out of 1000 (max. 8388607)
- 187 compressed objects within 2 object streams
- 49 named destinations out of 1000 (max. 500000)
- 346 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 312 PDF objects out of 1000 (max. 8388607)
+ 196 compressed objects within 2 object streams
+ 51 named destinations out of 1000 (max. 500000)
+ 354 words of extra memory for PDF output out of 10000 (max. 10000000)
 
