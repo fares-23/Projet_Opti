@@ -188,6 +188,98 @@
             \end{figure}
 
     \section*{Monte-Carlo}\addcontentsline{toc}{section}{Monte-Carlo}
+        Pour optimiser notre système, nous avons d'abord utilisé la méthode Monte-Carlo. Cette méthode est facile à implémenter et repose uniquement sur une      utilisation brute de la force de calcul.\\
+        
+        Comme décrit dans l'énoncé, on cherche à échantillonner l’espace des solutions avec un grand nombre de points puis de calculer leurs performances. On place ensuite ces points dans l'espace des solutions et déterminons les solutions non dominées et finalement la solution optimale.
+
+        \subsection*{Echantillonnage}
+            Avec la fonction \textit{np.linespace()} on commence par créer deux tableau de 1000 valeurs également espacés: 
+            \begin{itemize}
+                \item \textbf{Capa} (capacité de la batterie) allant de 0 à 14 kW.
+                \item \textbf{Seuil} (Puissance seuil maximum du train) allant de 0 à 1 MW.
+            \end{itemize}
+            
+            Nous avons choisi ces valeurs par rapport au PDF de complément.
+
+        \subsection*{Affichage des solutions}
+            On choisit ensuite 1000 couples (\textbf{Capa},\textbf{Seuil}) de façon aléatoire avec la fonction \textit{random.choice()}. En plottant cela dans l'espace des solutions nous obtenons le graphique suivant : 
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{espace_solution.png}
+                \caption{Espace des solutions}
+            \end{figure}
+
+            En reportant cela dans l'espace des objectifs, nous obtenons: 
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{espace_objectifs.png}
+                \caption{Espace des objectifs}
+            \end{figure}
+
+            Nous avons ensuite crée une fonction qui prend en argument une population et retourne les solutions non dominés. Cette fonction s'appelle \textit{non\_dominant\_sort(}pop\textit{)} et est disponible dans notre code.\\
+            
+            Voici nos resultats avec les solutions non dominés en rouge: 
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{Monte-Carlo_pareto.png}
+                \caption{Espace des objectifs avec solutions non dominés}
+            \end{figure}
+
+            Enfin, nous déterminons la meilleure solution avec la fonction \textit{choisir\_meilleur\_point()} qui prend en paramètre le front de pareto, ainsi que le poids que nous accordons à chacun des paramètres à optimiser. A savoir la chute de tension et la capacité de la batterie.\\
+            
+            Sur le graphique précédant, nous pouvons voir que la chute de tension possède une grande plage de variation sur les meilleures solutions tandis que la capacité reste surtout entre 0 et 2000. Nous accordons donc un poids plus important à la chute de tension.
+            Nous nous retrouvons enfin avec le graphique ci dessous, avec en vert la solution la plus optimale et ses specificités en note sous les graphiques:   
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{Monte-Carlo_meilleur_solution.png}
+                \caption{Espace des objectifs avec solutions non dominés et meilleure solution}
+            \end{figure}
+
+        \subsection*{Résultats}
+            En simulant plusieurs fois, nous obtenons des résultats qui varient légèrement à cause de la répartition aléatoire des points. Ci dessous se trouvent 3 graphiques avec toujours 1000 couples échantillons. 
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{Monte-Carlo.png}
+                \caption{Espace des objectifs avec solutions non dominés et meilleure solution}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{Monte-Carlo(1).png}
+                \caption{Espace des objectifs avec solutions non dominés et meilleure solution}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{Monte-Carlo(2).png}
+                \caption{Espace des objectifs avec solutions non dominés et meilleure solution}
+            \end{figure}
+
+            En augmentant le nombre d'échantillons, nous pouvons avoir une meilleure précision. Ci dessous sont les résultats avec N = 5000 couples. 
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{Monte-Carlo_5000.png}
+                \caption{Espace des objectifs avec solutions non dominés et meilleure solution pour N = 5000}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{Monte-Carlo_5000(1).png}
+                \caption{Espace des objectifs avec solutions non dominés et meilleure solution pour N = 5000}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[height=7cm]{Monte-Carlo_5000(2).png}
+                \caption{Espace des objectifs avec solutions non dominés et meilleure solution pour N = 5000}
+            \end{figure}
+            
 
 
     \section*{Algorithme NSGA-II}\addcontentsline{toc}{section}{Algorithme NSGA-II}
