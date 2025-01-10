@@ -2,6 +2,8 @@
 \babel@toc {french}{}\relax 
 \contentsline {section}{Introduction}{1}{section*.2}%
 \contentsline {section}{La fonction \texttt {Simulation()}}{1}{section*.3}%
-\contentsline {section}{Monte-Carlo}{1}{section*.4}%
-\contentsline {section}{Algorithme NSGA-II}{1}{section*.5}%
-\contentsline {section}{Conclusion}{1}{section*.6}%
+\contentsline {section}{Sans Batterie}{1}{section*.4}%
+\contentsline {section}{Avec Batterie}{1}{section*.5}%
+\contentsline {section}{Monte-Carlo}{1}{section*.6}%
+\contentsline {section}{Algorithme NSGA-II}{1}{section*.7}%
+\contentsline {section}{Conclusion}{1}{section*.8}%
