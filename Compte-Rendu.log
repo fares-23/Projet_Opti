@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.10.7)  10 JAN 2025 13:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.10.7)  10 JAN 2025 13:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1998,7 +1998,7 @@ L3 programming layer <2024-01-22>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `Compte-Rendu.out' has not changed.
-(rerunfilecheck)             Checksum: 43E81521142CA3D57FAE781FAE739527;610.
+(rerunfilecheck)             Checksum: DFD771C8BB4E6DDFCB1040EF60592FAF;610.
 Package logreq Info: Writing requests to 'Compte-Rendu.run.xml'.
 \openout1 = `Compte-Rendu.run.xml'.
 
@@ -2006,7 +2006,7 @@ Package logreq Info: Writing requests to 'Compte-Rendu.run.xml'.
 Here is how much of TeX's memory you used:
  43239 strings out of 474998
  842182 string characters out of 5767950
- 1928975 words of memory out of 5000000
+ 1927975 words of memory out of 5000000
  64597 multiletter control sequences out of 15000+600000
  606674 words of font info for 128 fonts, out of 8000000 for 9000
  788 hyphenation exceptions out of 8191
@@ -2015,7 +2015,7 @@ Here is how much of TeX's memory you used:
 are/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fon
 ts/type1/urw/times/utmr8a.pfb>
-Output written on Compte-Rendu.pdf (3 pages, 40461 bytes).
+Output written on Compte-Rendu.pdf (3 pages, 41047 bytes).
 PDF statistics:
  108 PDF objects out of 1000 (max. 8388607)
  70 compressed objects within 1 object stream
