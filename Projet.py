@@ -266,23 +266,35 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
     # Affichage:
     plt.figure("NSGA-II")
     plt.subplot(2, 1, 1)
+    print_label = False
     for pop in process[:-1]:
         for individual in pop:
             plt.plot(individual[0]/1000, individual[1]/1000, "+k")
     for individual in process[-1]:
-        plt.plot(individual[0]/1000, individual[1]/1000, "+r")
+        if not print_label:
+            plt.plot(individual[0]/1000, individual[1]/1000, "+r", label="Dernière génération")
+            print_label = True
+        else:
+            plt.plot(individual[0]/1000, individual[1]/1000, "+r")
     plt.title("Espace des Solutions / Espace des Objectifs")
     plt.xlabel("Capacités de la Batterie [kWh]")
     plt.ylabel("Seuils [kW]")
+    plt.legend()
     plt.grid()
     plt.subplot(2, 1, 2)
+    print_label = False
     for pop in process[:-1]:
         for individual in pop:
             plt.plot(individual[0]/1000, individual[2], "+k")
     for individual in process[-1]:
-        plt.plot(individual[0]/1000, individual[2], "+r")
+        if not print_label:
+            plt.plot(individual[0]/1000, individual[2], "+r", label="Dernière génération")
+            print_label = True
+        else:
+            plt.plot(individual[0]/1000, individual[2], "+r")
     plt.xlabel("Capacités de la Batterie [kWh]")
     plt.ylabel("Chutes de Tension [V]")
+    plt.legend()
     plt.grid()
 
 
