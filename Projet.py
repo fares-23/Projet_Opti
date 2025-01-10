@@ -88,7 +88,6 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
     for k in range(1, len(t)):
         if P_train[k] < 0: # Le train freine.
             Bat_E[k] = Bat_E[k-1]-P_train[k] * Bat_rend # On récupère l'énergie.
-            # P_train[k] = 0 # Le train ne consomme plus d'énergie.
             if Bat_E[k] > 3600*Bat_cap: # Dépasse-t-on les limites de la batterie?
                 Diff = Bat_E[k] - Bat_cap*3600 # On dissipe dans le rhéostat.
                 Bat_E[k] = Bat_cap*3600 # La batterie est pleine.
