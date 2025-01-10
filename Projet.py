@@ -87,19 +87,19 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
 
     for k in range(1, len(t)):
         if P_train[k] < 0: # Le train freine.
-            Bat_E[k] = Bat_E[k-1]-P_train[k] * Bat_rend
-            P_train[k] = 0
+            Bat_E[k] = Bat_E[k-1]-P_train[k] * Bat_rend # On récupère l'énergie.
+            P_train[k] = 0 # Le train ne consomme plus d'énergie.
             if Bat_E[k] > 3600*Bat_cap: # Dépasse-t-on les limites de la batterie?
-                Diff = Bat_E[k] - Bat_cap*3600
-                Bat_E[k] = Bat_cap*3600
+                Diff = Bat_E[k] - Bat_cap*3600 # On dissipe dans le rhéostat.
+                Bat_E[k] = Bat_cap*3600 # La batterie est pleine.
                 Rheo_P[k] = Diff # On dissipe dans le rhéostat.
         elif P_train[k] >= seuil: # Si le train demande de l'énergie.
-            Bat_E[k] = Bat_E[k-1] - (P_train[k]-seuil)
-            P_train[k] = P_train[k] - seuil * Bat_rend
+            Bat_E[k] = Bat_E[k-1] - (P_train[k]-seuil) # On consomme l'énergie.
+            P_train[k] = P_train[k] - seuil * Bat_rend # On consomme l'énergie.
             if Bat_E[k] < 0: # Dépasse-t-on les limites de la batterie?
-                Diff = -Bat_E[k]
-                Bat_E[k] = 0
-                P_train[k] += Diff
+                Diff = -Bat_E[k] # On dissipe dans le rhéostat.
+                Bat_E[k] = 0 # La batterie est vide.
+                P_train[k] += Diff # On dissipe dans le rhéostat.
         else:
             Bat_E[k] = Bat_E[k-1] # La batterie conserve son énergie.
 
