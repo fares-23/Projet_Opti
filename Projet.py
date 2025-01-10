@@ -270,7 +270,7 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
         for individual in pop:
             plt.plot(individual[0]/1000, individual[1]/1000, "+k")
     for individual in process[-1]:
-        plt.plot(individual[0]/1000, individual[1]/1000, "+c")
+        plt.plot(individual[0]/1000, individual[1]/1000, "+r")
     plt.title("Espace des Solutions / Espace des Objectifs")
     plt.xlabel("Capacités de la Batterie [kWh]")
     plt.ylabel("Seuils [kW]")
@@ -280,7 +280,7 @@ def NSGA2(CapaLim, CapaStep, SeuilLim, SeuilStep, PopSize, N, mutant=0.25):
         for individual in pop:
             plt.plot(individual[0]/1000, individual[2], "+k")
     for individual in process[-1]:
-        plt.plot(individual[0]/1000, individual[2], "+c")
+        plt.plot(individual[0]/1000, individual[2], "+r")
     plt.xlabel("Capacités de la Batterie [kWh]")
     plt.ylabel("Chutes de Tension [V]")
     plt.grid()
