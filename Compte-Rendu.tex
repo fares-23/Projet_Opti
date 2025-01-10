@@ -1,4 +1,4 @@
-\documentclass[11pt, a4paper, oneside, portrait]{article}
+\documentclass[11pt, a4paper, oneside, portrait]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T2A, T1]{fontenc}
 \usepackage[british, french, russian]{babel}
@@ -54,7 +54,13 @@
 
 \begin{document}
     \selectlanguage{french}
-    \maketitle % Flemme de faire plus sophistiqué.
+    \maketitle\thispagestyle{empty} % Flemme de faire plus sophistiqué.
+    \newpage\tableofcontents\thispagestyle{empty}
 
-    \newpage % Démarrer le rapport à partir de cette page.
+    \newpage\setcounter{page}{1} % Démarrer le rapport à partir de cette page.
+    \section*{Introduction}\addcontentsline{toc}{section}{Introduction}
+    \section*{La fonction \texttt{Simulation()}}\addcontentsline{toc}{section}{La fonction \texttt{Simulation()}}
+    \section*{Monte-Carlo}\addcontentsline{toc}{section}{Monte-Carlo}
+    \section*{Algorithme NSGA-II}\addcontentsline{toc}{section}{Algoruthme NSGA-II}
+    \section*{Conclusion}\addcontentsline{toc}{section}{Conclusion}
 \end{document}
