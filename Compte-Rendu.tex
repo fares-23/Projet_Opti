@@ -58,9 +58,29 @@
     \newpage\tableofcontents\thispagestyle{empty}
 
     \newpage\setcounter{page}{1} % Démarrer le rapport à partir de cette page.
+
+
     \section*{Introduction}\addcontentsline{toc}{section}{Introduction}
+        Dans ce présent document, nous allons étudier un modèle représentant un train, sa consommation, sa batterie et comment optimiser deux choses:
+
+        ---~La capacité de ladite batterie.
+
+        ---~La chute de tension maximale aux bornes du train, sachant que nous ne devons pas atteindre moins de $500$~V aux bornes du train.
+
+        Le modèle auquel nous nous intéressons a été codé en python (le code est joint au document), et prend en compte, de façon non-exhaustive, les déplacements du train, sa vitesse, son accélération, sa puissance consommée et la puissance de la LAC (ligne aérienne de contact).
+        Le fichier \texttt{marche.txt}, qui nous a été remis dès le début du projet, indique les déplacements du train en fonction du temps.
+        De rapides et simples calculs nous permettent de trouver la vitesse du train, puis son accélération, primordiales pour la suite du projet.
+
     \section*{La fonction \texttt{Simulation()}}\addcontentsline{toc}{section}{La fonction \texttt{Simulation()}}
+
+
     \section*{Monte-Carlo}\addcontentsline{toc}{section}{Monte-Carlo}
+
+
     \section*{Algorithme NSGA-II}\addcontentsline{toc}{section}{Algorithme NSGA-II}
+
+
     \section*{Conclusion}\addcontentsline{toc}{section}{Conclusion}
+
+
 \end{document}
