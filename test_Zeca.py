@@ -87,7 +87,7 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
 
     for k in range(1, len(t)):
         if P_train[k] < 0: # Le train freine.
-            Bat_E[k] = Bat_E[k-1]-P_train[k] * Bat_rend
+            Bat_E[k] = Bat_E[k-1]-P_train[k]* Bat_rend
             P_train[k] = 0
             if Bat_E[k] > 3600*Bat_cap: # Dépasse-t-on les limites de la batterie?
                 Diff = Bat_E[k] - Bat_cap*3600
@@ -95,7 +95,7 @@ def Simulation(Bat_cap,seuil, PlotSim=False):
                 Rheo_P[k] = Diff # On dissipe dans le rhéostat.
         elif P_train[k] >= seuil: # Si le train demande de l'énergie.
             Bat_E[k] = Bat_E[k-1] - (P_train[k]-seuil)
-            P_train[k] = P_train[k] - seuil * Bat_rend
+            P_train[k] = (P_train[k]-seuil) * Bat_rend
             if Bat_E[k] < 0: # Dépasse-t-on les limites de la batterie?
                 Diff = -Bat_E[k]
                 Bat_E[k] = 0
@@ -453,7 +453,7 @@ pareto_seuils = [solu[1] for solu in non_dominés]
 
 best_capacite,best_seuil,best_chute = choisir_meilleur_point(non_dominés, 1, 30)
 
-Simulation(best_capacite, best_seuil, True) # Meilleure solution.
+Simulation(best_capacite, best_seuil) # Meilleure solution.
 
 fig, axs = plt.subplots(1, 2, figsize=(12, 5))  # Create a figure with 2 subplots side by side
 plt.get_current_fig_manager().set_window_title('Monte-Carlo') # Nom de la fenêtre
