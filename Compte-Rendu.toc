@@ -1,9 +1,10 @@
 \babel@toc {russian}{}\relax 
 \babel@toc {french}{}\relax 
 \contentsline {section}{Introduction}{1}{section*.2}%
-\contentsline {section}{La fonction \texttt {Simulation()}}{1}{section*.3}%
-\contentsline {subsection}{Sans Batterie}{1}{section*.4}%
-\contentsline {subsection}{Avec Batterie}{1}{section*.5}%
-\contentsline {section}{Monte-Carlo}{1}{section*.6}%
-\contentsline {section}{Algorithme NSGA-II}{1}{section*.7}%
-\contentsline {section}{Conclusion}{2}{section*.11}%
+\contentsline {section}{La fonction \texttt {Simulation()}}{1}{section*.4}%
+\contentsline {subsection}{Sans Batterie}{1}{section*.5}%
+\contentsline {subsection}{Avec Batterie}{2}{section*.8}%
+\contentsline {subsection}{Analyse des sous-stations et qualité du système}{4}{section*.13}%
+\contentsline {section}{Monte-Carlo}{6}{section*.16}%
+\contentsline {section}{Algorithme NSGA-II}{6}{section*.17}%
+\contentsline {section}{Conclusion}{8}{section*.21}%

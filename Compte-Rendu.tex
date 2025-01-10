@@ -71,10 +71,121 @@
         Le fichier \texttt{marche.txt}, qui nous a été remis dès le début du projet, indique les déplacements du train en fonction du temps.
         De rapides et simples calculs nous permettent de trouver la vitesse du train, puis son accélération, primordiales pour la suite du projet.
 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Figures/Schematic.png}
+            \caption{Schéma du modèle.}
+            \label{fig:Schematic}
+        \end{figure}
+
     \section*{La fonction \texttt{Simulation()}}\addcontentsline{toc}{section}{La fonction \texttt{Simulation()}}
         \subsection*{Sans Batterie}\addcontentsline{toc}{subsection}{Sans Batterie}
-        \subsection*{Avec Batterie}\addcontentsline{toc}{subsection}{Avec Batterie}
+            Lors de l’analyse du mouvement du train, les graphiques montrent les interactions entre la
+            position, la vitesse et l’accélération. Une phase d’accélération entraîne une augmentation plus
+            marquée des courbes de position et de vitesse. À l’inverse, pendant le freinage, la position évolue
+            lentement tandis que la vitesse et l’accélération diminuent progressivement jusqu’à atteindre zéro,
+            tant que l’accélération reste nulle.
 
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{Figures/xvf.png}
+                \caption{Position, Vitesse et Accélération du train.}
+                \label{fig:xvf}
+            \end{figure}
+
+            Pour calculer ces variations, la fonction
+            np.gradient a été utilisée.
+
+            Ensuite, la puissance du train a été déterminée en intégrant les forces résistives, motrices et
+            mécaniques, en tenant compte d’un rendement global de $80$\%{} pour la chaîne de conversion.
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{Figures/AdamCode_0.png}
+                \caption{}
+                \label{fig:AdamCode_0}
+            \end{figure}
+
+        \subsection*{Avec Batterie}\addcontentsline{toc}{subsection}{Avec Batterie}
+            L’introduction d’une batterie (rendement de $90$\%{}, capacité de $10$ kWh et tension de seuil de $400$~kV) modifie les dynamiques observées. Les graphiques indiquent que les relations entre la
+            puissance, la tension et le courant restent cohérentes. Durant les phases d’accélération, la
+            batterie se décharge, tandis qu’elle se recharge lors du freinage. Grâce à sa grande capacité et à
+            sa tension élevée, la batterie ne se décharge jamais complètement.
+
+            Concernant la gestion de la batterie, on a suivit la logique (indiqué figure \ref{fig:AdamCode_1}):
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{Figures/AdamCode_1.png}
+                \caption{Gestion de la batterie.}
+                \label{fig:AdamCode_1}
+            \end{figure}
+
+            Le système globale peut-être schématiser comme le modèle ci-dessous:
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{Figures/AdamCode_2.png}
+                \caption{Schéma des résistances du circuit.}
+                \label{fig:AdamCode_2}
+            \end{figure}
+
+            \begin{gather*}
+                R_{\text{LAC1}} = \rho_{\text{LAC}} x\\
+                R_{\text{LAC2}} = \rho_{\text{LAC}} \left(x_{\text{Tot}}-x\right)\\
+                R_\text{rail1} = x\rho_\text{rail}\\
+                R_\text{rail2} = \left(x_\text{Tot}-x\right)\rho_\text{rail}\\
+                R_\text{eq} = \frac{\left(R_\text{SST}+R_\text{LAC1}+R_\text{rail1}\right)\left(R_\text{SST}+R_\text{LAC2}+R_\text{rail2}\right)}{2R_\text{SST}+R_\text{LAC1}+R_\text{LAC2}+R_\text{rail1}+R_\text{rail2}}
+            \end{gather*}
+
+            Cela nous permet ainsi de calculer la tension et le courant du train.
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{Figures/PTI.png}
+                \caption{Puissance, tension et courant du train.}
+                \label{fig:PTI}
+            \end{figure}
+
+            On observe ainsi que les relations entre la puissance, la tension et le courant sont respecté. Lors
+            des phases d’accélération ou de freinage on a une variation de ces éléments.
+
+            Concernant la batterie, celle ci réagit également comme nous l’avions prévu, à savoir que lors du
+            freinage celle-ci se recharge, puis lors des phases d’accélération elle se décharge. Étant donné
+            que nous avons prit une très grande batterie ($10$~kW) et une tension de seuil élevé, la batterie ne se
+            décharge jamais complètement.
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{Figures/Bat.png}
+                \caption{Gestion de la batterie.}
+                \label{fig:Bat}
+            \end{figure}
+
+            \subsection*{Analyse des sous-stations et qualité du système}\addcontentsline{toc}{subsection}{Analyse des sous-stations et qualité du système}
+            Les graphiques montrent que le courant et la puissance dans les LAC (Lignes Aériennes de
+            Contact) des sous-stations sont équilibrés. On constate également que, lorsque le train
+            s’approche de la sous-station 2, la puissance et le courant fournis par celle-ci augmentent
+            proportionnellement.
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{Figures/P.png}
+                \includegraphics[width=0.75\textwidth]{Figures/I.png}
+                \caption{Puissances et courants mis en jeu.}
+                \label{fig:PI}
+            \end{figure}
+
+            Un indicateur clé de performance, la chute de tension maximale, est utilisé pour évaluer la qualité
+            du système. Cet indicateur pourrait être optimisé en choisissant une batterie et une tension de
+            seuil mieux adaptées.
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{Figures/Qual.png}
+                \caption{Chute de tension (indicateur de qualité) du système.}
+                \label{fig:Qual}
+            \end{figure}
 
     \section*{Monte-Carlo}\addcontentsline{toc}{section}{Monte-Carlo}
 
